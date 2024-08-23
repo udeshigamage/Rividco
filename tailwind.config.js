@@ -25,7 +25,7 @@ export default {
       },
     },
   },
-  plugins: [addVariablesForColors],
+  plugins: [require("daisyui")],
 };
 
 function addVariablesForColors({ addBase, theme }) {
