@@ -1,12 +1,16 @@
-import React from "react";
+// src/Admin/Adminlayout.tsx
+import React, { ReactNode } from "react";
 import Sidenavigation from "./Sidenavigation";
-import System from "./System";
 
-const Adminlayout = () => {
+interface AdminlayoutProps {
+  children: ReactNode;
+}
+
+const Adminlayout: React.FC<AdminlayoutProps> = ({ children }) => {
   return (
-    <div className="flex h-screen ">
+    <div className="flex h-screen">
       <Sidenavigation />
-      <System />
+      <div className="ml-64 p-5 flex-grow bg-gray-500">{children}</div>
     </div>
   );
 };
