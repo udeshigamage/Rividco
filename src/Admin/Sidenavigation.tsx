@@ -68,6 +68,18 @@ const Sidenavigation: React.FC = () => {
         </li>
         <li className="my-4">
           <Link
+            to="/admin/projectitem"
+            className={`block text-white no-underline text-base p-2 rounded transition-colors duration-300 ${
+              isActive("/admin/projectitem")
+                ? "bg-gray-700"
+                : "hover:bg-gray-700"
+            }`}
+          >
+            Project item
+          </Link>
+        </li>
+        <li className="my-4">
+          <Link
             to="/admin/cia"
             className={`block text-white no-underline text-base p-2 rounded transition-colors duration-300 ${
               isActive("/admin/cia") ? "bg-gray-700" : "hover:bg-gray-700"
