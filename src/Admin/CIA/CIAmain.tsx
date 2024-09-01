@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FaEdit } from "react-icons/fa";
+import { FaEdit, FaEye } from "react-icons/fa";
 import { FaDeleteLeft } from "react-icons/fa6";
 import { IoIosAdd } from "react-icons/io";
 import AddCustomermodal from "./AddCIA";
@@ -12,87 +12,67 @@ import {
 } from "react-icons/tb";
 import { toast } from "react-toastify";
 import AddCIA from "./AddCIA";
+import { comment } from "postcss";
 
 const CIAmain = () => {
   const customers = [
     {
-      id: 1,
-      FirstName: "John",
-      LastName: "Williams",
-      email: "johnwilliams@example.com",
-      Address: "Colombo",
-      category: "VIP",
-      comment: "Frequent customer",
-      mobileno: "+94760305481",
-      officeno: "+94112345678",
+      Taskid: 1,
+      Category: "Installation",
+      Requestedby: "Anderson Solar Solutions",
+      Addedby: "liamanderson",
+      Addeddate: "2025-02-12",
+      Status: "Pending",
+      Assignedto: "Residential Client",
+      Callbackno: "+94760123456",
+      comment: "nothing to say",
     },
     {
-      id: 2,
-      FirstName: "Sarah",
-      LastName: "Connor",
-      email: "sarahconnor@example.com",
-      Address: "Negombo",
-      category: "Regular",
-      comment: "Prefers online orders",
-      mobileno: "+94761234567",
-      officeno: "+94113456789",
+      Taskid: 2,
+      Category: "Maintenance",
+      Requestedby: "GreenTech Solar",
+      Addedby: "sarahgreen",
+      Addeddate: "2025-02-10",
+      Status: "In Progress",
+      Assignedto: "Commercial Client",
+      Callbackno: "+94760123457",
+      comment: "nothing to say",
     },
     {
-      id: 3,
-      FirstName: "David",
-      LastName: "Smith",
-      email: "davidsmith@example.com",
-      Address: "Kandy",
-      category: "New",
-      comment: "Interested in discounts",
-      mobileno: "+94767890123",
-      officeno: "+94119876543",
+      Taskid: 3,
+      Category: "Repair",
+      Requestedby: "SunPower Systems",
+      Addedby: "markjohnson",
+      Addeddate: "2025-02-11",
+      Status: "Completed",
+      Assignedto: "Industrial Client",
+      Callbackno: "+94760123458",
+      comment: "nothing to say",
     },
     {
-      id: 4,
-      FirstName: "Emma",
-      LastName: "Brown",
-      email: "emmabrown@example.com",
-      Address: "Galle",
-      category: "VIP",
-      comment: "Bulk orders",
-      mobileno: "+94762345678",
-      officeno: "+94115678901",
+      Taskid: 4,
+      Category: "Installation",
+      Requestedby: "SolarWave Solutions",
+      Addedby: "emilysolar",
+      Addeddate: "2025-02-09",
+      Status: "Pending",
+      Assignedto: "Corporate Client",
+      Callbackno: "+94760123459",
+      comment: "nothing to say",
     },
     {
-      id: 5,
-      FirstName: "Michael",
-      LastName: "Johnson",
-      email: "michaeljohnson@example.com",
-      Address: "Jaffna",
-      category: "Regular",
-      comment: "Long-time customer",
-      mobileno: "+94768901234",
-      officeno: "+94118765432",
-    },
-    {
-      id: 6,
-      FirstName: "Sophia",
-      LastName: "Wilson",
-      email: "sophiawilson@example.com",
-      Address: "Matara",
-      category: "New",
-      comment: "Wants customized products",
-      mobileno: "+94764567890",
-      officeno: "+94111223344",
-    },
-    {
-      id: 7,
-      FirstName: "Liam",
-      LastName: "Anderson",
-      email: "liamanderson@example.com",
-      Address: "Kurunegala",
-      category: "VIP",
-      comment: "Corporate client",
-      mobileno: "+94760123456",
-      officeno: "+94115566778",
+      Taskid: 5,
+      Category: "Inspection",
+      Requestedby: "Sunshine Panels",
+      Addedby: "jamesking",
+      Addeddate: "2025-02-13",
+      Status: "In Progress",
+      Assignedto: "Residential Client",
+      Callbackno: "+94760123460",
+      comment: "nothing to say",
     },
   ];
+
   const [ismodelopen, setmodelopen] = useState<boolean>(false);
   const [ismodelconfirmopen, setmodelconfirmopen] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -101,6 +81,7 @@ const CIAmain = () => {
   const [customer, setcustomer] = useState({});
   const [isloading, setisloading] = useState(false);
   const [selectedcustomer, setselectedcustomer] = useState({});
+  const [view, setview] = useState(false);
   const pageSize = 5;
   const handleOpenModal = (item: any) => {
     console.log("clicked");
@@ -150,7 +131,10 @@ const CIAmain = () => {
         <h1 className="text-4xl font-serif text-white p-2">CIA</h1>
         <button
           className="text-black pt-3 rounded-lg "
-          onClick={() => handleOpenModal({})}
+          onClick={() => {
+            setview(false);
+            handleOpenModal({});
+          }}
         >
           {" "}
           <IoIosAdd
@@ -163,19 +147,32 @@ const CIAmain = () => {
         <thead className="font-extrabold bg-white bg-opacity-35 rounded-lg">
           <tr>
             <th className="border-collapse border border-slate-900 border-x-2 border-y-2 p-5 w-28">
-              id
+              Task id
             </th>
-            <th className="border-collapse border border-slate-900 border-x-2 border-y-2 w-72">
-              Name
+            <th className="border-collapse border border-slate-900 border-x-2 border-y-2 w-28">
+              Category
             </th>
-            <th className="border-collapse border border-slate-900 border-x-2 border-y-2 w-52">
-              Contactnumber
+            <th className="border-collapse border border-slate-900 border-x-2 border-y-2 w-28">
+              Requested By
             </th>
-            <th className="border-collapse border border-slate-900 border-x-2 border-y-2 w-52">
-              Address
+            <th className="border-collapse border border-slate-900 border-x-2 border-y-2 w-28">
+              Added By
             </th>
-            <th className="border-collapse border border-slate-900 border-x-2 border-y-2 w-52 ">
-              Actions
+            <th className="border-collapse border border-slate-900 border-x-2 border-y-2 w-28 ">
+              Added Date
+            </th>
+            <th className="border-collapse border border-slate-900 border-x-2 border-y-2 w-28 ">
+              Status
+            </th>
+            <th className="border-collapse border border-slate-900 border-x-2 border-y-2 w-28 ">
+              Assigned to
+            </th>
+
+            <th className="border-collapse border border-slate-900 border-x-2 border-y-2 w-28 ">
+              Callback no
+            </th>
+            <th className="border-collapse border border-slate-900 border-x-2 border-y-2 w-28 ">
+              Action
             </th>
           </tr>
         </thead>
@@ -192,20 +189,44 @@ const CIAmain = () => {
               >
                 <tr className="border-collapse border border-slate-900 border-x-1 border-y-1">
                   <td className="border-collapse border border-slate-900 border-x-1 border-y-1">
-                    {item.id}
+                    {item.Taskid}
                   </td>
                   <td className="border-collapse border border-slate-900 border-x-1 border-y-1">
-                    {item.FirstName}
+                    {item.Category}
                   </td>
                   <td className="border-collapse border border-slate-900 border-x-1 border-y-1">
-                    {item.mobileno}{" "}
+                    {item.Requestedby}{" "}
                   </td>
-                  <td>{item.Address}</td>
+                  <td>{item.Addedby}</td>
+                  <td className="border-collapse border border-slate-900 border-x-1 border-y-1">
+                    {item.Addeddate}{" "}
+                  </td>
+                  <td className="border-collapse border border-slate-900 border-x-1 border-y-1">
+                    {item.Status}{" "}
+                  </td>
+                  <td className="border-collapse border border-slate-900 border-x-1 border-y-1">
+                    {item.Assignedto}{" "}
+                  </td>
+                  <td className="border-collapse border border-slate-900 border-x-1 border-y-1">
+                    {item.Callbackno}{" "}
+                  </td>
                   <td className="border-collapse border border-slate-900 border-x-1 border-y-1 text-start m-2 ">
                     <div className="flex flex-row position-relative flex flex-row justify-center items-center">
                       <button
                         className=" text-slate-900 p-1 rounded-lg m-2 "
-                        onClick={() => handleOpenModal(item)}
+                        onClick={() => {
+                          setview(true);
+                          handleOpenModal(item);
+                        }}
+                      >
+                        <FaEye className="pt-1" />
+                      </button>
+                      <button
+                        className=" text-slate-900 p-1 rounded-lg m-2 "
+                        onClick={() => {
+                          setview(false);
+                          handleOpenModal(item);
+                        }}
                       >
                         <FaEdit className="pt-1" />
                       </button>
@@ -251,6 +272,7 @@ const CIAmain = () => {
           isopen={ismodelopen}
           isclose={handleCloseModal}
           selectedCustomer={selectedcustomer}
+          view={view}
         />
       )}
       {ismodelconfirmopen && (
