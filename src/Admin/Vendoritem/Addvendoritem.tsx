@@ -8,33 +8,31 @@ import { IoIosAdd } from "react-icons/io";
 type props = {
   isopen: boolean;
   isclose: () => void;
-  selectedCustomer: any;
+  selecteditem: any;
   view: boolean;
 };
 
 const Addvendoritem: React.FC<props> = ({
   isopen,
   isclose,
-  selectedCustomer,
+  selecteditem,
   view,
 }) => {
   if (!isopen) return null;
 
   const formik = useFormik({
     initialValues: {
-      FirstName: selectedCustomer?.FirstName || "",
-      LastName: selectedCustomer?.LastName || "",
-      email: selectedCustomer?.email || "",
-      Address: selectedCustomer?.Address || "",
-      category: selectedCustomer?.category || "",
-      comment: selectedCustomer?.comment || "",
-      mobileno: selectedCustomer?.mobileno || "",
-      officeno: selectedCustomer?.officeno || "",
+      itemname: selecteditem?.item_name || "",
+      Vendor: selecteditem?.Vendor || "",
+      price: selecteditem?.Price || 0,
+      warrantyduration: selecteditem?.Warranty_duration || "",
+      capacity: selecteditem?.capacity || "",
+      comment: selecteditem?.comments || "",
     },
     onSubmit: async (values) => {
       // alert(JSON.stringify(values, null, 2));
       try {
-        if (selectedCustomer?.id) {
+        if (selecteditem?.id) {
           const resonponse = await axios.put(
             "http://localhost:3000/api/customer",
             values
@@ -81,101 +79,105 @@ const Addvendoritem: React.FC<props> = ({
               </button>
             </div>
             <h2 className="text-2xl font-semibold self-center font-serif">
-              {view ? "View" : selectedCustomer?.id ? "Edit" : "Add"} Vendor
-              Item
+              {view ? "View" : selecteditem?.id ? "Edit" : "Add"} Vendor Item
             </h2>
-            <div className="flex flex-row position-relative my-4 gap-5">
-              <div className="flex flex-row position-relative">
-                <label className=" w-2/5 flex  items-center">item Name</label>
-                <input
-                  id="FirstName"
-                  name="FirstName"
-                  type="text"
-                  placeholder="First Name"
-                  onChange={formik.handleChange}
-                  value={formik.values.FirstName}
-                  disabled={view}
-                  className="border-2  border-black w-3/4 rounded-lg p-2"
-                />
-              </div>
 
-              <div className="flex flex-row position-relative">
-                <label className=" w-1/2 flex  items-center">Vendor</label>
-                <input
-                  id="LastName"
-                  name="LastName"
-                  type="text"
-                  placeholder="Last Name"
-                  onChange={formik.handleChange}
-                  value={formik.values.LastName}
-                  disabled={view}
-                  className="border-2  border-black w-3/4 rounded-lg p-2"
-                />
+            <div className="flex flex-col gap-4 p-4 bg-white rounded-2xl shadow-md">
+              {/* Existing Customer Form Code */}
+
+              <div className="flex flex-col gap-4 mt-6">
+                <div className="flex gap-5 mb-4">
+                  <div className="flex flex-col gap-1 w-1/2">
+                    <label className="text-gray-700 font-semibold">
+                      Item Name
+                    </label>
+                    <input
+                      id="itemname"
+                      name="itemname"
+                      type="text"
+                      onChange={formik.handleChange}
+                      value={formik.values.itemname}
+                      disabled={view}
+                      className="border-2 border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-400"
+                    />
+                  </div>
+
+                  <div className="flex flex-col gap-1 w-1/2">
+                    <label className="text-gray-700 font-semibold">
+                      Vendor
+                    </label>
+                    <select className="border-2 border-gray-300 rounded-lg p-2 bg-white text-black focus:ring-2 focus:ring-blue-400">
+                      <option value="vendor1">Vendor 1</option>
+                      <option value="vendor2">Vendor 2</option>
+                      <option value="vendor3">Vendor 3</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="flex gap-5 mb-4">
+                  <div className="flex flex-col gap-1 w-1/2">
+                    <label className="text-gray-700 font-semibold">Price</label>
+                    <input
+                      id="price"
+                      name="price"
+                      type="number"
+                      onChange={formik.handleChange}
+                      value={formik.values.price}
+                      disabled={view}
+                      className="border-2 border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-400"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex gap-5 mb-4">
+                  <div className="flex flex-col gap-1 w-1/2">
+                    <label className="text-gray-700 font-semibold">
+                      Warranty Duration
+                    </label>
+                    <input
+                      type="text"
+                      id="warrantyduration"
+                      name="warrantyduration"
+                      onChange={formik.handleChange}
+                      value={formik.values.warrantyduration}
+                      disabled={view}
+                      className="border-2 border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-400"
+                    />
+                  </div>
+
+                  <div className="flex flex-col gap-1 w-1/2">
+                    <label className="text-gray-700 font-semibold">
+                      Capacity
+                    </label>
+                    <input
+                      id="capacity"
+                      name="capacity"
+                      type="text"
+                      onChange={formik.handleChange}
+                      value={formik.values.capacity}
+                      disabled={view}
+                      className="border-2 border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-400"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-1 mb-4">
+                  <label className="text-gray-700 font-semibold">
+                    Comments
+                  </label>
+                  <textarea
+                    id="comment"
+                    name="comment"
+                    rows={2}
+                    cols={50}
+                    onChange={formik.handleChange}
+                    value={formik.values.comment}
+                    disabled={view}
+                    className="border-2 border-gray-300 bg-white rounded-lg p-2 focus:ring-2 focus:ring-blue-400"
+                  />
+                </div>
               </div>
             </div>
-
-            <div className="flex flex-row position-relative mb-4 gap-2">
-              <div className="flex flex-row position-relative">
-                <label className=" w-2/5 flex  items-center ">price</label>
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  placeholder="Email"
-                  onChange={formik.handleChange}
-                  value={formik.values.email}
-                  disabled={view}
-                  className="border-2  border-black w-4/5 rounded-lg p-2 m-3 flex  justify-items-start"
-                />
-              </div>
-            </div>
-            <div className="flex flex-row position-relative mb-4 gap-2">
-              <div className="flex flex-row position-relative">
-                <label className=" w-2/5 flex  items-center ">
-                  warranty duration
-                </label>
-                <input
-                  type="tel"
-                  placeholder="(+94) 767 123 456"
-                  id="mobileno"
-                  name="mobileno"
-                  onChange={formik.handleChange}
-                  value={formik.values.mobileno}
-                  disabled={view}
-                  className="border-2  border-black w-3/4 rounded-lg p-2 flex  justify-items-start"
-                />
-              </div>
-
-              <div className="flex flex-row position-relative">
-                <label className=" w-1/2 flex  items-center ">capacity</label>
-                <input
-                  id="officeno"
-                  name="officeno"
-                  onChange={formik.handleChange}
-                  value={formik.values.officeno}
-                  type="tel"
-                  placeholder="(+94) 767 123 456"
-                  disabled={view}
-                  className="border-2 text-white border-black w-3/4 rounded-lg p-2"
-                />
-              </div>
-            </div>
-
-            <div className="flex flex-row position-relative mb-4">
-              <label className=" w-1/6 flex  items-center ">Comments</label>
-              <textarea
-                id="comment"
-                name="comment"
-                onChange={formik.handleChange}
-                value={formik.values.comment}
-                rows={2}
-                cols={50}
-                placeholder="Comments"
-                disabled={view}
-                className="border-2  text-white border-black w-3/4 rounded-lg p-2 flex  justify-items-start"
-              />
-            </div>
-
             {!view && (
               <div className="flex flex-row position-relative justify-end items-end align-bottom self-end">
                 <button

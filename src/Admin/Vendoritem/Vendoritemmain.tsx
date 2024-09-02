@@ -23,6 +23,7 @@ const Vendoritemmain = () => {
       Price: 5000,
       capacity: "100KW",
       Warranty_duration: "1 year",
+      comments: "comments",
     },
     {
       id: 2,
@@ -32,6 +33,7 @@ const Vendoritemmain = () => {
       Price: 12000,
       capacity: "200KW",
       Warranty_duration: "2 years",
+      comments: "comments",
     },
     {
       id: 3,
@@ -41,6 +43,7 @@ const Vendoritemmain = () => {
       Price: 8000,
       capacity: "150KW",
       Warranty_duration: "3 years",
+      comments: "comments",
     },
     {
       id: 4,
@@ -50,6 +53,7 @@ const Vendoritemmain = () => {
       Price: 3000,
       capacity: "50KW",
       Warranty_duration: "1.5 years",
+      comments: "comments",
     },
     {
       id: 5,
@@ -59,24 +63,7 @@ const Vendoritemmain = () => {
       Price: 2500,
       capacity: "N/A",
       Warranty_duration: "5 years",
-    },
-    {
-      id: 6,
-      item_name: "Cable Set",
-      Vendor: "WiredTech",
-      Vendor_address: "Galle, Sri Lanka",
-      Price: 1500,
-      capacity: "N/A",
-      Warranty_duration: "6 months",
-    },
-    {
-      id: 7,
-      item_name: "Connector Kit",
-      Vendor: "SunLink",
-      Vendor_address: "Matara, Sri Lanka",
-      Price: 1000,
-      capacity: "N/A",
-      Warranty_duration: "1 year",
+      comments: "comments",
     },
   ];
   const [ismodelopen, setmodelopen] = useState<boolean>(false);
@@ -84,25 +71,25 @@ const Vendoritemmain = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [totalItems, settotalitems] = useState(0);
-  const [customer, setcustomer] = useState({});
+  const [item, setitem] = useState({});
   const [isloading, setisloading] = useState(false);
-  const [selectedcustomer, setselectedcustomer] = useState({});
+  const [selecteditem, setselecteditem] = useState({});
   const pageSize = 5;
   const [view, setview] = useState(false);
   const handleOpenModal = (item: any) => {
     console.log("clicked");
-    setselectedcustomer(item);
-    console.log(selectedcustomer);
+    setselecteditem(item);
+
     setmodelopen(true);
   };
-  const fetchcustomer = async (page: number) => {
+  const fetchitem = async (page: number) => {
     setisloading(true);
     try {
       const response = await axios.get(
         `http://localhost:3000/api/Employee?page=${page}&pageSize=${pageSize}`
       );
 
-      setcustomer(response.data);
+      setitem(response.data);
     } catch (error) {
       console.log(error);
       toast.error("Something went wrong");
@@ -116,7 +103,7 @@ const Vendoritemmain = () => {
     }
   };
   useEffect(() => {
-    fetchcustomer(currentPage);
+    fetchitem(currentPage);
   }, [currentPage]);
   const handleconfirmCloseModal = () => {
     setmodelconfirmopen(false);
@@ -262,7 +249,7 @@ const Vendoritemmain = () => {
         <Addvendor
           isopen={ismodelopen}
           isclose={handleCloseModal}
-          selectedCustomer={selectedcustomer}
+          selecteditem={selecteditem}
           view={view}
         />
       )}
