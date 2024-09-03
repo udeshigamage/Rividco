@@ -8,33 +8,35 @@ import { IoIosAdd } from "react-icons/io";
 type props = {
   isopen: boolean;
   isclose: () => void;
-  selectedCustomer: any;
+  selectedproject: any;
   view: boolean;
 };
 
 const AddProject: React.FC<props> = ({
   isopen,
   isclose,
-  selectedCustomer,
+  selectedproject,
   view,
 }) => {
   if (!isopen) return null;
 
   const formik = useFormik({
     initialValues: {
-      FirstName: selectedCustomer?.FirstName || "",
-      LastName: selectedCustomer?.LastName || "",
-      email: selectedCustomer?.email || "",
-      Address: selectedCustomer?.Address || "",
-      category: selectedCustomer?.category || "",
-      comment: selectedCustomer?.comment || "",
-      mobileno: selectedCustomer?.mobileno || "",
-      officeno: selectedCustomer?.officeno || "",
+      customer: selectedproject?.customer || "",
+      description: selectedproject?.description || "",
+      location: selectedproject?.location || "",
+      coordinator: selectedproject?.coordinator || "",
+      startdate: selectedproject?.startdate || "",
+      warranty_period: selectedproject?.warranty_period || "",
+      status: selectedproject?.status || "",
+      estimatedcost: selectedproject?.estimatedcost || "",
+      referencedby: selectedproject?.referencedby || "",
+      comment: selectedproject?.comment || "",
     },
     onSubmit: async (values) => {
       // alert(JSON.stringify(values, null, 2));
       try {
-        if (selectedCustomer?.id) {
+        if (selectedproject?.id) {
           const resonponse = await axios.put(
             "http://localhost:3000/api/customer",
             values
@@ -81,125 +83,158 @@ const AddProject: React.FC<props> = ({
               </button>
             </div>
             <h2 className="text-2xl font-semibold self-center font-serif">
-              {view ? "View" : selectedCustomer?.id ? "Edit" : "Add"} Projects
+              {view ? "View" : selectedproject?.id ? "Edit" : "Add"} Projects
             </h2>
-            <div className="flex flex-row position-relative my-4 gap-5">
-              <div className="flex flex-row position-relative">
-                <label className=" w-2/5 flex  items-center">First Name</label>
-                <input
-                  id="FirstName"
-                  name="FirstName"
-                  type="text"
-                  placeholder="First Name"
-                  onChange={formik.handleChange}
-                  value={formik.values.FirstName}
-                  disabled={view}
-                  className="border-2  border-black w-3/4 rounded-lg p-2"
-                />
+            <div className="flex flex-row gap-4 p-4 bg-white rounded-2xl shadow-md">
+              <div className="basis-1/2 flex flex-col gap-4">
+                <div className="flex flex-col gap-1">
+                  <label className="text-gray-700 font-semibold">
+                    Customer
+                  </label>
+                  <select className="p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+                    <option defaultChecked>Select Customer</option>
+                    <option value={"john"}>John</option>
+                    <option>Eric</option>
+                    <option>Samuel</option>
+                  </select>
+                </div>
+
+                <div className="flex flex-col gap-1">
+                  <label className="text-gray-700 font-semibold">
+                    Description
+                  </label>
+                  <textarea
+                    cols={50}
+                    rows={2}
+                    id="description"
+                    name="description"
+                    onChange={formik.handleChange}
+                    value={formik.values.description}
+                    disabled={view}
+                    className="p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  />
+                </div>
+
+                <div className="flex flex-col gap-1">
+                  <label className="text-gray-700 font-semibold">
+                    Location
+                  </label>
+                  <input
+                    type="text"
+                    id="location"
+                    name="location"
+                    onChange={formik.handleChange}
+                    value={formik.values.location}
+                    disabled={view}
+                    className="p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  />
+                </div>
+
+                <div className="flex flex-col gap-1">
+                  <label className="text-gray-700 font-semibold">
+                    Coordinator
+                  </label>
+                  <select className="p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+                    <option defaultChecked>Select Coordinator</option>
+                    <option>John</option>
+                    <option>Eric</option>
+                    <option>Samuel</option>
+                  </select>
+                </div>
+
+                <div className="flex flex-col gap-1">
+                  <label className="text-gray-700 font-semibold">
+                    Comments
+                  </label>
+                  <textarea
+                    cols={50}
+                    rows={2}
+                    id="comment"
+                    name="comment"
+                    onChange={formik.handleChange}
+                    value={formik.values.comment}
+                    disabled={view}
+                    className="p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  />
+                </div>
               </div>
 
-              <div className="flex flex-row position-relative">
-                <label className=" w-1/2 flex  items-center">Last Name</label>
-                <input
-                  id="LastName"
-                  name="LastName"
-                  type="text"
-                  placeholder="Last Name"
-                  onChange={formik.handleChange}
-                  value={formik.values.LastName}
-                  disabled={view}
-                  className="border-2  border-black w-3/4 rounded-lg p-2"
-                />
-              </div>
-            </div>
+              <div className="basis-1/2 flex flex-col gap-4">
+                <div className="flex flex-col gap-1">
+                  <label className="text-gray-700 font-semibold">
+                    Start Date
+                  </label>
+                  <input
+                    type="date"
+                    id="startdate"
+                    name="startdate"
+                    onChange={formik.handleChange}
+                    value={formik.values.startdate}
+                    disabled={view}
+                    className="p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  />
+                </div>
 
-            <div className="flex flex-row position-relative mb-4 gap-2">
-              <div className="flex flex-row position-relative">
-                <label className=" w-2/5 flex  items-center ">Email</label>
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  placeholder="Email"
-                  onChange={formik.handleChange}
-                  value={formik.values.email}
-                  disabled={view}
-                  className="border-2  border-black w-4/5 rounded-lg p-2 m-3 flex  justify-items-start"
-                />
-              </div>
+                <div className="flex flex-col gap-1">
+                  <label className="text-gray-700 font-semibold">
+                    Warranty Duration
+                  </label>
+                  <input
+                    type="text"
+                    id="warranty_period"
+                    name="warranty_period"
+                    onChange={formik.handleChange}
+                    value={formik.values.warranty_period}
+                    disabled={view}
+                    className="p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  />
+                </div>
 
-              <div className="flex flex-row position-relative gap-3">
-                <label className=" w-1/2 flex  items-center ">Category</label>
-                <select
-                  className="border-2 text-white border-black w-[160px] h-[44px] rounded-lg p-2 mt-4"
-                  name="category"
-                  id="category"
-                  onChange={formik.handleChange}
-                  disabled={view}
-                  value={formik.values.category}
-                >
-                  <option value="category">Category</option>
-                </select>
-              </div>
-            </div>
-            <div className="flex flex-row position-relative mb-4 gap-2">
-              <div className="flex flex-row position-relative">
-                <label className=" w-2/5 flex  items-center ">Mobile no</label>
-                <input
-                  type="tel"
-                  placeholder="(+94) 767 123 456"
-                  id="mobileno"
-                  name="mobileno"
-                  onChange={formik.handleChange}
-                  value={formik.values.mobileno}
-                  disabled={view}
-                  className="border-2  border-black w-3/4 rounded-lg p-2 flex  justify-items-start"
-                />
-              </div>
+                <div className="flex flex-col gap-1">
+                  <label className="text-gray-700 font-semibold">Status</label>
+                  <select className="p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+                    <option defaultChecked>Select Status</option>
+                    <option>Pending</option>
+                    <option>Work in progress</option>
+                    <option>Completed</option>
+                  </select>
+                </div>
 
-              <div className="flex flex-row position-relative">
-                <label className=" w-1/2 flex  items-center ">Office no</label>
-                <input
-                  id="officeno"
-                  name="officeno"
-                  onChange={formik.handleChange}
-                  value={formik.values.officeno}
-                  type="tel"
-                  placeholder="(+94) 767 123 456"
-                  disabled={view}
-                  className="border-2 text-white border-black w-3/4 rounded-lg p-2"
-                />
+                <div className="flex flex-col gap-1">
+                  <label className="text-gray-700 font-semibold">
+                    Estimated Cost
+                  </label>
+                  <input
+                    type="number"
+                    id="estimatedcost"
+                    name="estimatedcost"
+                    onChange={formik.handleChange}
+                    value={formik.values.estimatedcost}
+                    disabled={view}
+                    className="p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  />
+                </div>
+
+                <div className="flex flex-col gap-1">
+                  <label className="text-gray-700 font-semibold">
+                    Reference By
+                  </label>
+                  <select
+                    className="p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    name="referencedby"
+                    id="referencedby"
+                    value={formik.values.referencedby}
+                    onChange={formik.handleChange}
+                  >
+                    <option>Select Referenced by</option>
+                    <option>John</option>
+
+                    <option>Eric</option>
+                    <option>Samuel</option>
+                  </select>
+                </div>
               </div>
             </div>
-            <div className="flex flex-row position-relative mb-4">
-              <label className=" w-1/6 flex  items-center">Address</label>
-              <textarea
-                id="Address"
-                name="Address"
-                onChange={formik.handleChange}
-                value={formik.values.Address}
-                rows={2}
-                cols={50}
-                disabled={view}
-                placeholder="Enter Address"
-                className="border-2  text-white border-black w-3/4 rounded-lg  p-2"
-              />
-            </div>
-            <div className="flex flex-row position-relative mb-4">
-              <label className=" w-1/6 flex  items-center ">Comments</label>
-              <textarea
-                id="comment"
-                name="comment"
-                onChange={formik.handleChange}
-                value={formik.values.comment}
-                rows={2}
-                cols={50}
-                placeholder="Comments"
-                disabled={view}
-                className="border-2  text-white border-black w-3/4 rounded-lg p-2 flex  justify-items-start"
-              />
-            </div>
-
             {!view && (
               <div className="flex flex-row position-relative justify-end items-end align-bottom self-end">
                 <button
