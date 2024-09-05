@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FaEdit } from "react-icons/fa";
+import { FaEdit, FaEye } from "react-icons/fa";
 import { FaDeleteLeft } from "react-icons/fa6";
 import { IoIosAdd } from "react-icons/io";
 import AddCustomermodal from "./AddSystem";
@@ -25,6 +25,7 @@ const Systemusermain = () => {
       comment: "Frequent customer",
       mobileno: "+94760305481",
       officeno: "+94112345678",
+      Role: "sales representative",
     },
     {
       id: 2,
@@ -36,6 +37,7 @@ const Systemusermain = () => {
       comment: "Prefers online orders",
       mobileno: "+94761234567",
       officeno: "+94113456789",
+      Role: "sales representative",
     },
     {
       id: 3,
@@ -47,6 +49,7 @@ const Systemusermain = () => {
       comment: "Interested in discounts",
       mobileno: "+94767890123",
       officeno: "+94119876543",
+      Role: "sales representative",
     },
     {
       id: 4,
@@ -58,6 +61,7 @@ const Systemusermain = () => {
       comment: "Bulk orders",
       mobileno: "+94762345678",
       officeno: "+94115678901",
+      Role: "sales representative",
     },
     {
       id: 5,
@@ -69,28 +73,7 @@ const Systemusermain = () => {
       comment: "Long-time customer",
       mobileno: "+94768901234",
       officeno: "+94118765432",
-    },
-    {
-      id: 6,
-      FirstName: "Sophia",
-      LastName: "Wilson",
-      email: "sophiawilson@example.com",
-      Address: "Matara",
-      category: "New",
-      comment: "Wants customized products",
-      mobileno: "+94764567890",
-      officeno: "+94111223344",
-    },
-    {
-      id: 7,
-      FirstName: "Liam",
-      LastName: "Anderson",
-      email: "liamanderson@example.com",
-      Address: "Kurunegala",
-      category: "VIP",
-      comment: "Corporate client",
-      mobileno: "+94760123456",
-      officeno: "+94115566778",
+      Role: "sales representative",
     },
   ];
   const [ismodelopen, setmodelopen] = useState<boolean>(false);
@@ -101,6 +84,7 @@ const Systemusermain = () => {
   const [customer, setcustomer] = useState({});
   const [isloading, setisloading] = useState(false);
   const [selectedcustomer, setselectedcustomer] = useState({});
+  const [view, setview] = useState(false);
   const pageSize = 5;
   const handleOpenModal = (item: any) => {
     console.log("clicked");
@@ -150,7 +134,10 @@ const Systemusermain = () => {
         <h1 className="text-4xl font-serif text-white p-2">System user</h1>
         <button
           className="text-black pt-3 rounded-lg "
-          onClick={() => handleOpenModal({})}
+          onClick={() => {
+            setview(false);
+            handleOpenModal({});
+          }}
         >
           {" "}
           <IoIosAdd
@@ -163,17 +150,18 @@ const Systemusermain = () => {
         <thead className="font-extrabold bg-white bg-opacity-35 rounded-lg">
           <tr>
             <th className="border-collapse border border-slate-900 border-x-2 border-y-2 p-5 w-28">
-              id
+              First Name
             </th>
-            <th className="border-collapse border border-slate-900 border-x-2 border-y-2 w-72">
-              Name
+            <th className="border-collapse border border-slate-900 border-x-2 border-y-2 w-52">
+              Last Name
             </th>
             <th className="border-collapse border border-slate-900 border-x-2 border-y-2 w-52">
               Contactnumber
             </th>
             <th className="border-collapse border border-slate-900 border-x-2 border-y-2 w-52">
-              Address
+              Role
             </th>
+
             <th className="border-collapse border border-slate-900 border-x-2 border-y-2 w-52 ">
               Actions
             </th>
@@ -192,20 +180,35 @@ const Systemusermain = () => {
               >
                 <tr className="border-collapse border border-slate-900 border-x-1 border-y-1">
                   <td className="border-collapse border border-slate-900 border-x-1 border-y-1">
-                    {item.id}
+                    {item.FirstName}
                   </td>
                   <td className="border-collapse border border-slate-900 border-x-1 border-y-1">
-                    {item.FirstName}
+                    {item.LastName}
                   </td>
                   <td className="border-collapse border border-slate-900 border-x-1 border-y-1">
                     {item.mobileno}{" "}
                   </td>
-                  <td>{item.Address}</td>
+                  <td className="border-collapse border border-slate-900 border-x-1 border-y-1">
+                    {item.Role}{" "}
+                  </td>
+
                   <td className="border-collapse border border-slate-900 border-x-1 border-y-1 text-start m-2 ">
                     <div className="flex flex-row position-relative flex flex-row justify-center items-center">
                       <button
                         className=" text-slate-900 p-1 rounded-lg m-2 "
-                        onClick={() => handleOpenModal(item)}
+                        onClick={() => {
+                          setview(true);
+                          handleOpenModal(item);
+                        }}
+                      >
+                        <FaEye className="pt-1" />
+                      </button>
+                      <button
+                        className=" text-slate-900 p-1 rounded-lg m-2 "
+                        onClick={() => {
+                          setview(false);
+                          handleOpenModal(item);
+                        }}
                       >
                         <FaEdit className="pt-1" />
                       </button>
@@ -251,6 +254,7 @@ const Systemusermain = () => {
           isopen={ismodelopen}
           isclose={handleCloseModal}
           selectedCustomer={selectedcustomer}
+          view={view}
         />
       )}
       {ismodelconfirmopen && (
