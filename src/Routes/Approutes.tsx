@@ -12,6 +12,7 @@ import CIAmain from "../Admin/CIA/CIAmain";
 import System from "../Admin/System";
 import Systemusermain from "../Admin/Systemuser/Systemusermain";
 import Vendoritemmain from "../Admin/Vendoritem/Vendoritemmain";
+import Projectitemmain from "../Admin/Projectitem/Projectitemmain";
 
 const Approutes: React.FC = () => {
   return (
@@ -34,6 +35,7 @@ const Approutes: React.FC = () => {
                 <Route path="projects" element={<Projectmain />} />
                 <Route path="cia" element={<CIAmain />} />
                 <Route path="systemusers" element={<Systemusermain />} />
+                <Route path="projectitem" element={<Projectitemmain />} />
               </Routes>
             </Adminlayout>
           }
