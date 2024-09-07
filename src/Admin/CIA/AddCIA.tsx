@@ -22,11 +22,17 @@ const AddCIA: React.FC<props> = ({
   useEffect(() => {
     handlef();
   }, []);
+
   const formik = useFormik({
     initialValues: {
       Taskid: selectedCustomer?.Taskid || "",
       Status: selectedCustomer?.Status || "",
-
+      Description: selectedCustomer?.Description || "",
+      Category: selectedCustomer?.Category || "",
+      Requestedby: selectedCustomer?.Requestedby || "",
+      Assignedto: selectedCustomer?.Assignedto || "",
+      Callbackno: selectedCustomer?.Callbackno || "",
+      projectregarding: selectedCustomer?.projectregarding || "",
       comment: selectedCustomer?.comment || "",
     },
     onSubmit: async (values) => {

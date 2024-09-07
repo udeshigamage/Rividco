@@ -26,6 +26,8 @@ const CIAmain = () => {
       Assignedto: "Residential Client",
       Callbackno: "+94760123456",
       comment: "nothing to say",
+      projectregarding: "solar",
+      Description: "desc",
     },
     {
       Taskid: 2,
@@ -37,6 +39,8 @@ const CIAmain = () => {
       Assignedto: "Commercial Client",
       Callbackno: "+94760123457",
       comment: "nothing to say",
+      projectregarding: "solar",
+      Description: "desc",
     },
     {
       Taskid: 3,
@@ -48,6 +52,8 @@ const CIAmain = () => {
       Assignedto: "Industrial Client",
       Callbackno: "+94760123458",
       comment: "nothing to say",
+      projectregarding: "solar",
+      Description: "desc",
     },
     {
       Taskid: 4,
@@ -59,6 +65,8 @@ const CIAmain = () => {
       Assignedto: "Corporate Client",
       Callbackno: "+94760123459",
       comment: "nothing to say",
+      projectregarding: "solar",
+      Description: "desc",
     },
     {
       Taskid: 5,
@@ -70,6 +78,8 @@ const CIAmain = () => {
       Assignedto: "Residential Client",
       Callbackno: "+94760123460",
       comment: "nothing to say",
+      projectregarding: "solar",
+      Description: "desc",
     },
   ];
 
