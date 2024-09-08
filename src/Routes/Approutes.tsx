@@ -13,6 +13,7 @@ import System from "../Admin/System";
 import Systemusermain from "../Admin/Systemuser/Systemusermain";
 import Vendoritemmain from "../Admin/Vendoritem/Vendoritemmain";
 import Projectitemmain from "../Admin/Projectitem/Projectitemmain";
+import Projectmajor from "../Admin/Project/Projectmajor";
 
 const Approutes: React.FC = () => {
   return (
@@ -21,6 +22,7 @@ const Approutes: React.FC = () => {
         {/* Public Routes */}
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/admin/projects/main" element={<Projectmajor />} />
 
         {/* Admin Routes */}
         <Route

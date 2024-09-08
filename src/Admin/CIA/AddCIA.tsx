@@ -1,8 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import { comment } from "postcss";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
+import { IoIosAdd } from "react-icons/io";
 
 type props = {
   isopen: boolean;
@@ -11,17 +12,13 @@ type props = {
   view: boolean;
 };
 
-const AddCIA: React.FC<props> = ({
+const AddProject: React.FC<props> = ({
   isopen,
   isclose,
   selectedCustomer,
   view,
 }) => {
   if (!isopen) return null;
-  const handlef = () => {};
-  useEffect(() => {
-    handlef();
-  }, []);
 
   const formik = useFormik({
     initialValues: {
@@ -64,7 +61,7 @@ const AddCIA: React.FC<props> = ({
       <ToastContainer position="top-right" />
       <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50">
         <form onSubmit={formik.handleSubmit}>
-          <div className="bg-white bg-opacity-95 p-5 rounded-lg shadow-lg max-w-7xl w-full h-3/5 m-1 flex flex-col text-white">
+          <div className="bg-slate-900 bg-opacity-95 p-5 rounded-lg shadow-lg w-auto h-5/6 m-1 flex flex-col text-white ">
             <div className="flex flex-col ">
               <button
                 onClick={isclose}
@@ -84,77 +81,141 @@ const AddCIA: React.FC<props> = ({
                 </svg>
               </button>
             </div>
-            <h2 className="text-2xl font-semibold self-center text-black font-serif">
+            <h2 className="text-2xl font-semibold self-center font-serif">
               {view ? "View" : selectedCustomer?.id ? "Edit" : "Add"} CIA
             </h2>
-
-            <div className="flex flex-col gap-4 bg-white rounded-2xl shadow-md p-6 w-full min-w-full max-h-[60vh] overflow-y-auto">
-              {/* Existing Customer Form Code */}
-
-              <div className="flex flex-col gap-4 mt-6 w-full">
-                <div className="flex flex-col md:flex-row gap-5 mb-4 w-full">
-                  <div className="flex flex-col gap-1 w-full md:w-1/2">
-                    <label className="text-gray-700 font-semibold">
-                      Task ID
-                    </label>
-                    <input
-                      id="Taskid"
-                      name="Taskid"
-                      type="text"
-                      placeholder="Taskid"
-                      onChange={formik.handleChange}
-                      value={formik.values.Taskid}
-                      disabled={view}
-                      className="border-2 border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-400 w-full"
-                    />
-                  </div>
-
-                  <div className="flex flex-col gap-1">
-                    <label className="text-gray-700 font-semibold">
-                      Status
-                    </label>
-                    <select className="p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
-                      <option defaultChecked>Select Status</option>
-                      <option value={"john"}>John</option>
-                      <option>Eric</option>
-                      <option>Samuel</option>
-                    </select>
-                  </div>
+            <div className="flex flex-row gap-4 p-4 bg-white rounded-2xl shadow-md">
+              <div className="basis-1/2 flex flex-col gap-4">
+                <div className="flex flex-col gap-1">
+                  <label className="text-gray-700 font-semibold">
+                    Category
+                  </label>
+                  <select className="p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+                    <option defaultChecked>Select Category</option>
+                    <option value={"john"}>John</option>
+                    <option>Eric</option>
+                    <option>Samuel</option>
+                  </select>
                 </div>
 
-                <div className="flex flex-col gap-1 mb-4 w-full">
+                <div className="flex flex-col gap-1">
+                  <label className="text-gray-700 font-semibold">
+                    Description
+                  </label>
+                  <textarea
+                    cols={50}
+                    rows={2}
+                    id="description"
+                    name="description"
+                    onChange={formik.handleChange}
+                    value={formik.values.Description}
+                    disabled={view}
+                    className="p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  />
+                </div>
+
+                <div className="flex flex-col gap-1">
+                  <label className="text-gray-700 font-semibold">
+                    Project reguarding
+                  </label>
+                  <input
+                    type="text"
+                    id="projectregarding"
+                    name="projectregarding"
+                    onChange={formik.handleChange}
+                    value={formik.values.projectregarding}
+                    disabled={view}
+                    className="p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  />
+                </div>
+
+                <div className="flex flex-col gap-1">
+                  <label className="text-gray-700 font-semibold">
+                    Requested BY
+                  </label>
+                  <select className="p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+                    <option defaultChecked>Select Customer</option>
+                    <option>John</option>
+                    <option>Eric</option>
+                    <option>Samuel</option>
+                  </select>
+                </div>
+
+                <div className="flex flex-col gap-1">
                   <label className="text-gray-700 font-semibold">
                     Comments
                   </label>
                   <textarea
+                    cols={50}
+                    rows={2}
                     id="comment"
                     name="comment"
-                    rows={2}
-                    cols={50}
-                    placeholder="Comments"
                     onChange={formik.handleChange}
                     value={formik.values.comment}
                     disabled={view}
-                    className="border-2 border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-400 w-full"
+                    className="p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
                   />
                 </div>
               </div>
-            </div>
 
+              <div className="basis-1/2 flex flex-col gap-4">
+                <div className="flex flex-col gap-1">
+                  <label className="text-gray-700 font-semibold">
+                    Callback no
+                  </label>
+                  <input
+                    type="tel"
+                    id="Callbacknp"
+                    name="Callbackno"
+                    onChange={formik.handleChange}
+                    value={formik.values.Callbackno}
+                    disabled={view}
+                    className="p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  />
+                </div>
+
+                <div className="flex flex-col gap-1">
+                  <label className="text-gray-700 font-semibold">
+                    Assign to
+                  </label>
+                  <input
+                    type="text"
+                    id="Assignedto"
+                    name="Assignedto"
+                    onChange={formik.handleChange}
+                    value={formik.values.Assignedto}
+                    disabled={view}
+                    className="p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  />
+                </div>
+
+                <div className="flex flex-col gap-1">
+                  <label className="text-gray-700 font-semibold">Status</label>
+                  <select className="p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+                    <option defaultChecked>Select Status</option>
+                    <option>Pending</option>
+                    <option>Work in progress</option>
+                    <option>Completed</option>
+                  </select>
+                </div>
+              </div>
+            </div>
             {!view && (
-              <div className="flex flex-row justify-end items-center w-full mt-4">
+              <div className="flex flex-row position-relative justify-end items-end align-bottom self-end">
                 <button
                   type="submit"
-                  className="bg-blue-500 text-white px-6 py-2 rounded-md mr-2 w-auto"
-                  onClick={() => formik.handleSubmit}
+                  className="bg-blue-500 text-white px-4 py-2 rounded-md mr-2"
+                  onClick={() => {
+                    formik.handleSubmit;
+                  }}
                 >
                   Save
                 </button>
                 <button
-                  className="bg-gray-500 text-white px-6 py-2 rounded-md w-auto"
+                  className="bg-gray-500 text-white px-4 py-2 rounded-md"
                   onClick={() => {
-                    formik.resetForm();
-                    isclose();
+                    formik.resetForm;
+                    isclose;
                   }}
                 >
                   Cancel
@@ -168,4 +229,4 @@ const AddCIA: React.FC<props> = ({
   );
 };
 
-export default AddCIA;
+export default AddProject;

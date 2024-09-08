@@ -12,6 +12,7 @@ import {
 } from "react-icons/tb";
 import { toast } from "react-toastify";
 import AddProject from "./Addproject";
+import { useNavigate } from "react-router-dom";
 
 const Projectmain = () => {
   const data = [
@@ -129,9 +130,12 @@ const Projectmain = () => {
 
     setmodelconfirmopen(true);
   };
-
+  const navigate = useNavigate();
   const handleCloseModal = () => {
     setmodelopen(false);
+  };
+  const handleclick = (item: any) => {
+    navigate("/admin/projects/main", { state: { item } });
   };
   return (
     <div className="flex flex-col justify-center items-center bg-slate-900 rounded-lg  ">
@@ -186,7 +190,12 @@ const Projectmain = () => {
                 key={index}
                 className="border-collapse border font-semibold font-mono border-slate-900 border-x-1 border-y-1 text-center align-middle "
               >
-                <tr className="border-collapse border border-slate-900 border-x-1 border-y-1">
+                <tr
+                  className="border-collapse border border-slate-900 border-x-1 border-y-1"
+                  onClick={() => {
+                    handleclick(item);
+                  }}
+                >
                   <td className="border-collapse border border-slate-900 border-x-1 border-y-1">
                     {item.id}
                   </td>
