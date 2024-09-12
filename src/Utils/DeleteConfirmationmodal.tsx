@@ -26,7 +26,7 @@ const DeleteConfirmationmodal: React.FC<props> = ({ isopen, isclose }) => {
             </svg>
           </button>
           <TiWarning size={80} className="text-red-600  self-center" />
-          <h1 className="text-black text-lg font-serif m-1 self-center">
+          <h1 className="text-[#183642] text-lg font-serif m-1 self-center">
             {" "}
             Are you sure you want to delete?
           </h1>
