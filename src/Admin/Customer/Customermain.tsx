@@ -11,6 +11,7 @@ import {
   TbPlayerTrackPrevFilled,
 } from "react-icons/tb";
 import { toast } from "react-toastify";
+import pico1 from "../../assets/notfound.gif";
 
 const Customermain = () => {
   const customers = [
@@ -144,12 +145,12 @@ const Customermain = () => {
     setmodelopen(false);
   };
   return (
-    <div className="flex flex-col justify-center items-center bg-slate-900 rounded-lg  ">
+    <div className="flex flex-col justify-center items-center bg-[#B4D6E4] rounded-lg  ">
       {" "}
-      <div className="flex flex-row position-relative gap-[600px]">
-        <h1 className="text-4xl font-serif text-white p-2">Customers</h1>
+      <div className="flex flex-row position-relative gap-[800px]">
+        <h1 className="text-4xl font-serif text-[#183642] p-2">Customers</h1>
         <button
-          className="text-black pt-3 rounded-lg "
+          className="text-[#183642] pt-3 rounded-lg "
           onClick={() => {
             setview(false);
             handleOpenModal({});
@@ -158,56 +159,62 @@ const Customermain = () => {
           {" "}
           <IoIosAdd
             size={40}
-            className="text-slate-900 bg-white bg-opacity-50 rounded-lg m-2"
+            className="text-[#183642] bg-white bg-opacity-50 rounded-lg m-2"
           />
         </button>
       </div>
-      <table className="text-slate-900  font-serif  text-lg border-collapse border border-slate-900 bg-white bg-opacity-50 rounded-lg mb-10">
+      <table className="text-[#183642]  font-serif  text-lg border-collapse border border-[#183642] bg-white bg-opacity-50 rounded-lg mb-10">
         <thead className="font-extrabold bg-white bg-opacity-35 rounded-lg">
           <tr>
-            <th className="border-collapse border border-slate-900 border-x-2 border-y-2 p-5 w-28">
+            <th className="border-collapse border border-[#183642] border-x-2 border-y-2 p-5 w-28">
               id
             </th>
-            <th className="border-collapse border border-slate-900 border-x-2 border-y-2 w-72">
+            <th className="border-collapse border border-[#183642] border-x-2 border-y-2 w-72">
               Name
             </th>
-            <th className="border-collapse border border-slate-900 border-x-2 border-y-2 w-52">
+            <th className="border-collapse border border-[#183642] border-x-2 border-y-2 w-52">
               Contactnumber
             </th>
-            <th className="border-collapse border border-slate-900 border-x-2 border-y-2 w-52">
+            <th className="border-collapse border border-[#183642] border-x-2 border-y-2 w-52">
               Address
             </th>
-            <th className="border-collapse border border-slate-900 border-x-2 border-y-2 w-52 ">
+            <th className="border-collapse border border-[#183642] border-x-2 border-y-2 w-52 ">
               Actions
             </th>
           </tr>
         </thead>
         {isloading ? (
-          <div className="flex justify-center items-center">
-            <span className="loading loading-dots loading-lg"></span>
-          </div>
+          <tbody>
+            <tr>
+              <td colSpan={7} className="text-center">
+                <div className="flex  flex-row justify-center items-center">
+                  <span className="loading loading-dots size-16 loading-lg"></span>
+                </div>
+              </td>
+            </tr>
+          </tbody>
         ) : (
           <>
             {customers.map((item, index) => (
               <tbody
                 key={index}
-                className="border-collapse border font-semibold font-mono border-slate-900 border-x-1 border-y-1 text-center align-middle "
+                className="border-collapse border font-semibold font-mono border-[#183642] border-x-1 border-y-1 text-center align-middle "
               >
-                <tr className="border-collapse border border-slate-900 border-x-1 border-y-1">
-                  <td className="border-collapse border border-slate-900 border-x-1 border-y-1">
+                <tr className="border-collapse border border-[#183642] border-x-1 border-y-1">
+                  <td className="border-collapse border border-[#183642] border-x-1 border-y-1">
                     {item.id}
                   </td>
-                  <td className="border-collapse border border-slate-900 border-x-1 border-y-1">
+                  <td className="border-collapse border border-[#183642] border-x-1 border-y-1">
                     {item.FirstName}
                   </td>
-                  <td className="border-collapse border border-slate-900 border-x-1 border-y-1">
+                  <td className="border-collapse border border-[#183642] border-x-1 border-y-1">
                     {item.mobileno}{" "}
                   </td>
                   <td>{item.Address}</td>
-                  <td className="border-collapse border border-slate-900 border-x-1 border-y-1 text-start m-2 ">
+                  <td className="border-collapse border border-[#183642] border-x-1 border-y-1 text-start m-2 ">
                     <div className="flex flex-row position-relative flex flex-row justify-center items-center">
                       <button
-                        className=" text-slate-900 p-1 rounded-lg m-2 "
+                        className=" text-[#183642] p-1 rounded-lg m-2 "
                         onClick={() => {
                           setview(true);
                           handleOpenModal(item);
@@ -216,7 +223,7 @@ const Customermain = () => {
                         <FaEye className="pt-1" />
                       </button>
                       <button
-                        className=" text-slate-900 p-1 rounded-lg m-2 "
+                        className=" text-[#183642] p-1 rounded-lg m-2 "
                         onClick={() => {
                           setview(false);
                           handleOpenModal(item);
@@ -225,7 +232,7 @@ const Customermain = () => {
                         <FaEdit className="pt-1" />
                       </button>
                       <button
-                        className=" text-slate-900 p-1 rounded-lg m-2 "
+                        className=" text-[#183642] p-1 rounded-lg m-2 "
                         onClick={() => {
                           handleconfirmOpenModal();
                         }}
@@ -240,20 +247,20 @@ const Customermain = () => {
           </>
         )}
       </table>
-      <div className="flex flex-col items-end text-white m-5 text-lg font-semibold font-mono">
+      <div className="flex flex-col items-end text-[#183642]  text-lg font-semibold font-mono">
         <div className="pagination ">
           <button
-            className="btn mt-5 mr-5 bg-white text-slate-900 rounded-full p-2"
+            className="btn m-2 bg-white text-[#183642] rounded-full p-2"
             disabled={currentPage === 1}
             onClick={() => handlePageChange(currentPage - 1)}
           >
             <TbPlayerTrackPrevFilled />
           </button>
-          <span className="text-white  rounded-lg p-1">
+          <span className="text-[#183642]  rounded-lg p-1">
             Page {currentPage} of {totalPages}: {totalItems}
           </span>
           <button
-            className="btn mt-5 ml-5 bg-white text-slate-900 rounded-full p-2 "
+            className="btn mt-5 ml-5 bg-white text-[#183642] rounded-full p-2 "
             disabled={currentPage === totalPages}
             onClick={() => handlePageChange(currentPage + 1)}
           >

@@ -33,7 +33,7 @@ const Projectviewmodal: React.FC<props> = ({ isopen, isclose }) => {
             </svg>
           </button>
 
-          <table className="text-black border-collapse border-2">
+          <table className="text-[#183642] border-collapse border-2">
             <thead>
               <tr>
                 <td>Project Id</td>

@@ -106,7 +106,7 @@ const Addvendoritem: React.FC<props> = ({
                     <label className="text-gray-700 font-semibold">
                       Vendor
                     </label>
-                    <select className="border-2 border-gray-300 rounded-lg p-2 bg-white text-black focus:ring-2 focus:ring-blue-400">
+                    <select className="border-2 border-gray-300 rounded-lg p-2 bg-white text-[#183642] focus:ring-2 focus:ring-blue-400">
                       <option value="vendor1">Vendor 1</option>
                       <option value="vendor2">Vendor 2</option>
                       <option value="vendor3">Vendor 3</option>

@@ -82,7 +82,7 @@ const AddSystem: React.FC<props> = ({
                 </svg>
               </button>
             </div>
-            <h2 className="text-2xl font-semibold self-center text-black font-serif">
+            <h2 className="text-2xl font-semibold self-center text-[#183642] font-serif">
               {view ? "View" : selectedCustomer?.id ? "Edit" : "Add"} System
               User
             </h2>

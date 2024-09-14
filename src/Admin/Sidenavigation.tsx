@@ -1,6 +1,13 @@
 // src/Admin/Sidenavigation.tsx
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
+import {
+  MdCalendarMonth,
+  MdCall,
+  MdLogout,
+  MdPeopleAlt,
+  MdSettings,
+} from "react-icons/md";
 
 const Sidenavigation: React.FC = () => {
   const location = useLocation();
@@ -11,93 +18,92 @@ const Sidenavigation: React.FC = () => {
   };
 
   return (
-    <div className="w-64 h-screen bg-gray-800 text-white p-5 shadow-lg fixed top-0 left-0">
-      <h2 className="mb-5 text-2xl font-bold text-white">RIVIDCO</h2>
-      <ul className="list-none p-0">
-        <li className="my-4">
+    <div className="w-64 h-screen bg-[#183642] text-[#183642] p-5 shadow-lg fixed top-0 left-0">
+      <a href="/app">
+        <h2 className="mb-12 text-4xl font-bold text-white ml-3 ">RIVIDCO</h2>
+      </a>
+
+      <ul className="list-none p-0 ">
+        <li className="mb-4  ">
           <Link
-            to="/admin/dashboard"
-            className={`block text-white no-underline text-base p-2 rounded transition-colors duration-300 ${
-              isActive("/admin/dashboard") ? "bg-gray-700" : "hover:bg-gray-700"
-            }`}
-          >
-            Dashboard
-          </Link>
-        </li>
-        <li className="my-4">
-          <Link
-            to="/admin/customer"
-            className={`block text-white no-underline text-base p-2 rounded transition-colors duration-300 ${
+            to="/app/customer"
+            className={`block text-white text-xl font-semibold no-underline p-2 rounded  flex flex-row position-relative gap-2 transition-colors duration-300 ${
               isActive("/admin/customer") ? "bg-gray-700" : "hover:bg-gray-700"
             }`}
           >
+            <MdPeopleAlt className="" size={30} />
             Customer
           </Link>
         </li>
         <li className="my-4">
           <Link
-            to="/admin/vendor"
-            className={`block text-white no-underline text-base p-2 rounded transition-colors duration-300 ${
+            to="/app/vendor"
+            className={`block text-white text-xl font-semibold  no-underline  p-2 rounded flex flex-row position-relative gap-2 transition-colors duration-300 ${
               isActive("/admin/vendor") ? "bg-gray-700" : "hover:bg-gray-700"
             }`}
           >
+            <MdPeopleAlt className="" size={30} />
             Vendor
           </Link>
         </li>
         <li className="my-4">
           <Link
-            to="/admin/vendoritem"
-            className={`block text-white no-underline text-base p-2 rounded transition-colors duration-300 ${
+            to="/app/vendoritem"
+            className={`block text-white text-xl font-semibold no-underline  p-2 rounded flex flex-row position-relative gap-2 transition-colors duration-300 ${
               isActive("/admin/vendoritem")
                 ? "bg-gray-700"
                 : "hover:bg-gray-700"
             }`}
           >
+            <MdSettings className="" size={30} />
             Vendor Item
           </Link>
         </li>
         <li className="my-4">
           <Link
-            to="/admin/projects"
-            className={`block text-white no-underline text-base p-2 rounded transition-colors duration-300 ${
+            to="/app/projects"
+            className={`block text-white text-xl font-semibold no-underline  p-2 rounded flex flex-row position-relative gap-2 transition-colors duration-300 ${
               isActive("/admin/projects") ? "bg-gray-700" : "hover:bg-gray-700"
             }`}
           >
+            <MdCalendarMonth className="" size={30} />
             Projects
           </Link>
         </li>
+
         <li className="my-4">
           <Link
-            to="/admin/projectitem"
-            className={`block text-white no-underline text-base p-2 rounded transition-colors duration-300 ${
-              isActive("/admin/projectitem")
-                ? "bg-gray-700"
-                : "hover:bg-gray-700"
-            }`}
-          >
-            Project item
-          </Link>
-        </li>
-        <li className="my-4">
-          <Link
-            to="/admin/cia"
-            className={`block text-white no-underline text-base p-2 rounded transition-colors duration-300 ${
+            to="/app/cia"
+            className={`block text-white text-xl font-semibold no-underline  p-2 rounded flex flex-row position-relative gap-2 transition-colors duration-300 ${
               isActive("/admin/cia") ? "bg-gray-700" : "hover:bg-gray-700"
             }`}
           >
+            <MdCall className="" size={30} />
             CIA
           </Link>
         </li>
         <li className="my-4">
           <Link
-            to="/admin/systemusers"
-            className={`block text-white no-underline text-base p-2 rounded transition-colors duration-300 ${
+            to="/app/systemusers"
+            className={`block text-white text-xl font-semibold no-underline  p-2 rounded flex flex-row position-relative gap-2 transition-colors duration-300 ${
               isActive("/admin/systemusers")
                 ? "bg-gray-700"
                 : "hover:bg-gray-700"
             }`}
           >
+            <MdPeopleAlt className="" size={30} />
             System User
+          </Link>
+        </li>
+        <li className="mt-32">
+          <Link
+            to="/app/logout"
+            className={`block text-white text-xl font-semibold  no-underline  p-2 rounded flex flex-row position-relative gap-2 transition-colors duration-300 ${
+              isActive("/admin/logout") ? "bg-gray-700" : "hover:bg-red-400"
+            }`}
+          >
+            <MdLogout className="" size={30} />
+            Logout
           </Link>
         </li>
       </ul>
