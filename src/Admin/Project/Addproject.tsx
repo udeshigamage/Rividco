@@ -62,7 +62,7 @@ const AddProject: React.FC<props> = ({
       <ToastContainer position="top-right" />
       <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50">
         <form onSubmit={formik.handleSubmit}>
-          <div className="bg-slate-900 bg-opacity-95 p-5 rounded-lg shadow-lg w-auto h-5/6 m-1 flex flex-col text-white ">
+          <div className="bg- bg-opacity-95 p-5 rounded-lg shadow-lg w-auto h-5/6 m-1 flex flex-col text-white ">
             <div className="flex flex-col ">
               <button
                 onClick={isclose}

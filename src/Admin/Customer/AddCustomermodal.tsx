@@ -5,7 +5,7 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import { IoIosAdd } from "react-icons/io";
 import Projectviewmodal from "./Projectviewmodal";
-
+const API_URL = import.meta.env.VITE_API_URL;
 type props = {
   isopen: boolean;
   isclose: () => void;
@@ -21,18 +21,50 @@ const AddCustomermodal: React.FC<props> = ({
 }) => {
   if (!isopen) return null;
   const [modelopen, setmodelopen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const [totalItems, settotalitems] = useState(0);
+  const [customer, setcustomer] = useState<any[]>([]);
+  const [isloading, setisloading] = useState(false);
+  const pageSize = 5;
   const handleOpenModal = () => {
     setmodelopen(true);
   };
   const handleCLoseModal = () => {
     setmodelopen(false);
   };
+  const fetchcustomer = async (page: number) => {
+    setisloading(true);
+    try {
+      const response = await axios.get(
+        `${API_URL}/Customer?page=${page}&pageSize=${pageSize}`
+      );
+      console.log("customer", response.data.data);
+
+      setTotalPages(response.data.totalPages);
+      settotalitems(response.data.totalItems);
+    } catch (error) {
+      console.log(error);
+      toast.error("Something went wrong");
+    } finally {
+      setisloading(false);
+    }
+  };
+  const handlePageChange = (page: number) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+    }
+  };
+  useEffect(() => {
+    fetchcustomer(currentPage);
+  }, [currentPage]);
+
   const formik = useFormik({
     initialValues: {
-      FirstName: selectedCustomer?.FirstName || "",
-      LastName: selectedCustomer?.LastName || "",
+      firstName: selectedCustomer?.firstName || "",
+      lastName: selectedCustomer?.lastName || "",
       email: selectedCustomer?.email || "",
-      Address: selectedCustomer?.Address || "",
+      address: selectedCustomer?.address || "",
       category: selectedCustomer?.category || "",
       comment: selectedCustomer?.comment || "",
       mobileno: selectedCustomer?.mobileno || "",
@@ -43,22 +75,22 @@ const AddCustomermodal: React.FC<props> = ({
       try {
         if (selectedCustomer?.id) {
           const resonponse = await axios.put(
-            "http://localhost:3000/api/customer",
+            `${API_URL}/Customer/${selectedCustomer.id}`,
             values
           );
           console.log("response", resonponse);
           toast.success("Customer updated Successfully");
+          fetchcustomer(currentPage);
         } else {
-          const resonponse = await axios.post(
-            "http://localhost:3000/api/customer",
-            values
-          );
+          const resonponse = await axios.post(`${API_URL}/Customer`, values);
           console.log("response", resonponse);
           toast.success("Customer added Successfully");
+          fetchcustomer(currentPage);
         }
       } catch (error) {
         console.log(error);
         toast.success("Customer Added Successfully");
+      } finally {
       }
     },
   });
@@ -88,7 +120,8 @@ const AddCustomermodal: React.FC<props> = ({
               </button>
             </div>
             <h2 className="text-2xl font-semibold self-center font-serif">
-              {view ? "View" : selectedCustomer?.id ? "Edit" : "Add"} Customer
+              {view ? "View" : selectedCustomer?.customer_ID ? "Edit" : "Add"}{" "}
+              Customer
             </h2>
             <div className="flex flex-col gap-4 p-4 bg-white rounded-2xl shadow-md">
               {/* Existing Customer Form Code */}
@@ -100,12 +133,12 @@ const AddCustomermodal: React.FC<props> = ({
                       First Name
                     </label>
                     <input
-                      id="FirstName"
-                      name="FirstName"
+                      id="firstName"
+                      name="firstName"
                       type="text"
                       placeholder="First Name"
                       onChange={formik.handleChange}
-                      value={formik.values.FirstName}
+                      value={formik.values.firstName}
                       disabled={view}
                       className="border-2 border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-400"
                     />
@@ -116,12 +149,12 @@ const AddCustomermodal: React.FC<props> = ({
                       Last Name
                     </label>
                     <input
-                      id="LastName"
-                      name="LastName"
+                      id="lastName"
+                      name="lastName"
                       type="text"
                       placeholder="Last Name"
                       onChange={formik.handleChange}
-                      value={formik.values.LastName}
+                      value={formik.values.lastName}
                       disabled={view}
                       className="border-2 border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-400"
                     />
@@ -197,13 +230,13 @@ const AddCustomermodal: React.FC<props> = ({
                 <div className="flex flex-col gap-1 mb-4">
                   <label className="text-gray-700 font-semibold">Address</label>
                   <textarea
-                    id="Address"
-                    name="Address"
+                    id="address"
+                    name="address"
                     rows={2}
                     cols={50}
                     placeholder="Enter Address"
                     onChange={formik.handleChange}
-                    value={formik.values.Address}
+                    value={formik.values.address}
                     disabled={view}
                     className="border-2 border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-400"
                   />
