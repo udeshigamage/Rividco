@@ -22,7 +22,7 @@ const Customermain = () => {
   const [customer, setcustomer] = useState<any[]>([]);
   const [isloading, setisloading] = useState(false);
   const [selectedcustomer, setselectedcustomer] = useState({});
-  const pageSize = 5;
+  const pageSize = 9;
   const [view, setview] = useState(false);
   const handleOpenModal = (item: any) => {
     console.log("clicked");
@@ -51,6 +51,9 @@ const Customermain = () => {
     if (page >= 1 && page <= totalPages) {
       setCurrentPage(page);
     }
+  };
+  const resetPageToFirst = () => {
+    setCurrentPage(1);
   };
   useEffect(() => {
     fetchcustomer(currentPage);
@@ -197,6 +200,8 @@ const Customermain = () => {
           isclose={handleCloseModal}
           selectedCustomer={selectedcustomer}
           view={view}
+          fetchcustomer={() => fetchcustomer(currentPage)}
+          resetPageToFirst={resetPageToFirst}
         />
       )}
       {ismodelconfirmopen && (

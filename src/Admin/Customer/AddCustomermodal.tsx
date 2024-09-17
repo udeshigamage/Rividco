@@ -11,6 +11,8 @@ type props = {
   isclose: () => void;
   selectedCustomer: any;
   view: boolean;
+  fetchcustomer: () => void;
+  resetPageToFirst: () => void;
 };
 
 const AddCustomermodal: React.FC<props> = ({
@@ -18,46 +20,18 @@ const AddCustomermodal: React.FC<props> = ({
   isclose,
   selectedCustomer,
   view,
+  fetchcustomer,
+  resetPageToFirst,
 }) => {
   if (!isopen) return null;
   const [modelopen, setmodelopen] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(0);
-  const [totalItems, settotalitems] = useState(0);
-  const [customer, setcustomer] = useState<any[]>([]);
-  const [isloading, setisloading] = useState(false);
-  const pageSize = 5;
+
   const handleOpenModal = () => {
     setmodelopen(true);
   };
   const handleCLoseModal = () => {
     setmodelopen(false);
   };
-  const fetchcustomer = async (page: number) => {
-    setisloading(true);
-    try {
-      const response = await axios.get(
-        `${API_URL}/Customer?page=${page}&pageSize=${pageSize}`
-      );
-      console.log("customer", response.data.data);
-
-      setTotalPages(response.data.totalPages);
-      settotalitems(response.data.totalItems);
-    } catch (error) {
-      console.log(error);
-      toast.error("Something went wrong");
-    } finally {
-      setisloading(false);
-    }
-  };
-  const handlePageChange = (page: number) => {
-    if (page >= 1 && page <= totalPages) {
-      setCurrentPage(page);
-    }
-  };
-  useEffect(() => {
-    fetchcustomer(currentPage);
-  }, [currentPage]);
 
   const formik = useFormik({
     initialValues: {
@@ -65,41 +39,48 @@ const AddCustomermodal: React.FC<props> = ({
       lastName: selectedCustomer?.lastName || "",
       email: selectedCustomer?.email || "",
       address: selectedCustomer?.address || "",
-      category: selectedCustomer?.category || "",
       comment: selectedCustomer?.comment || "",
+      category: selectedCustomer?.category || "",
       mobileno: selectedCustomer?.mobileno || "",
       officeno: selectedCustomer?.officeno || "",
     },
-    onSubmit: async (values) => {
-      // alert(JSON.stringify(values, null, 2));
+    onSubmit: async (values, { resetForm }) => {
       try {
-        if (selectedCustomer?.id) {
+        if (selectedCustomer?.customer_ID) {
+          console.log(selectedCustomer.customer_ID);
           const resonponse = await axios.put(
-            `${API_URL}/Customer/${selectedCustomer.id}`,
+            `${API_URL}/Customer/${selectedCustomer.customer_ID}`,
             values
           );
           console.log("response", resonponse);
+
           toast.success("Customer updated Successfully");
-          fetchcustomer(currentPage);
+          resetPageToFirst();
+          fetchcustomer();
         } else {
+          console.log(selectedCustomer.id);
           const resonponse = await axios.post(`${API_URL}/Customer`, values);
           console.log("response", resonponse);
+
           toast.success("Customer added Successfully");
-          fetchcustomer(currentPage);
+          resetPageToFirst();
+          fetchcustomer();
         }
+        isclose();
       } catch (error) {
         console.log(error);
-        toast.success("Customer Added Successfully");
+        toast.error("Error");
       } finally {
+        {
+        }
       }
     },
   });
   return (
     <div>
-      <ToastContainer position="top-right" />
-      <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50">
+      <div className="fixed inset-0 flex justify-center items-center bg-[#183642] bg-opacity-50">
         <form onSubmit={formik.handleSubmit}>
-          <div className="bg-slate-900 bg-opacity-95 p-5 rounded-lg shadow-lg w-auto h-5/6 m-1 flex flex-col text-white ">
+          <div className="bg-[#183642] bg-opacity-95 p-5 rounded-lg shadow-lg w-[800px] h-[650px] m-1 flex flex-col text-white ">
             <div className="flex flex-col ">
               <button
                 onClick={isclose}
@@ -123,7 +104,7 @@ const AddCustomermodal: React.FC<props> = ({
               {view ? "View" : selectedCustomer?.customer_ID ? "Edit" : "Add"}{" "}
               Customer
             </h2>
-            <div className="flex flex-col gap-4 p-4 bg-white rounded-2xl shadow-md">
+            <div className="flex flex-col gap-4 p-4 bg-white rounded-2xl w-[750px] h-[500px] shadow-md">
               {/* Existing Customer Form Code */}
 
               <div className="flex flex-col gap-4 mt-6">
@@ -140,7 +121,7 @@ const AddCustomermodal: React.FC<props> = ({
                       onChange={formik.handleChange}
                       value={formik.values.firstName}
                       disabled={view}
-                      className="border-2 border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-400"
+                      className="border-2 text-white bg-black border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-400"
                     />
                   </div>
 
@@ -156,7 +137,7 @@ const AddCustomermodal: React.FC<props> = ({
                       onChange={formik.handleChange}
                       value={formik.values.lastName}
                       disabled={view}
-                      className="border-2 border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-400"
+                      className="border-2 border-gray-300 text-white bg-black rounded-lg p-2 focus:ring-2 focus:ring-blue-400"
                     />
                   </div>
                 </div>
@@ -172,24 +153,8 @@ const AddCustomermodal: React.FC<props> = ({
                       onChange={formik.handleChange}
                       value={formik.values.email}
                       disabled={view}
-                      className="border-2 border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-400"
+                      className="border-2 border-gray-300 text-white bg-black rounded-lg p-2 focus:ring-2 focus:ring-blue-400"
                     />
-                  </div>
-
-                  <div className="flex flex-col gap-1 w-1/2">
-                    <label className="text-gray-700 font-semibold">
-                      Category
-                    </label>
-                    <select
-                      id="category"
-                      name="category"
-                      onChange={formik.handleChange}
-                      value={formik.values.category}
-                      disabled={view}
-                      className="border-2 border-gray-300 rounded-lg p-2 bg-white focus:ring-2 focus:ring-blue-400"
-                    >
-                      <option value="category">Category</option>
-                    </select>
                   </div>
                 </div>
 
@@ -206,7 +171,7 @@ const AddCustomermodal: React.FC<props> = ({
                       onChange={formik.handleChange}
                       value={formik.values.mobileno}
                       disabled={view}
-                      className="border-2 border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-400"
+                      className="border-2 border-gray-300 rounded-lg p-2 text-white bg-black focus:ring-2 focus:ring-blue-400"
                     />
                   </div>
 
@@ -222,7 +187,7 @@ const AddCustomermodal: React.FC<props> = ({
                       onChange={formik.handleChange}
                       value={formik.values.officeno}
                       disabled={view}
-                      className="border-2 border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-400"
+                      className="border-2 border-gray-300 text-white bg-black rounded-lg p-2 focus:ring-2 focus:ring-blue-400"
                     />
                   </div>
                 </div>
@@ -238,24 +203,7 @@ const AddCustomermodal: React.FC<props> = ({
                     onChange={formik.handleChange}
                     value={formik.values.address}
                     disabled={view}
-                    className="border-2 border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-400"
-                  />
-                </div>
-
-                <div className="flex flex-col gap-1 mb-4">
-                  <label className="text-gray-700 font-semibold">
-                    Comments
-                  </label>
-                  <textarea
-                    id="comment"
-                    name="comment"
-                    rows={2}
-                    cols={50}
-                    placeholder="Comments"
-                    onChange={formik.handleChange}
-                    value={formik.values.comment}
-                    disabled={view}
-                    className="border-2 border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-400"
+                    className="border-2 border-gray-300 text-white bg-black rounded-lg p-2 focus:ring-2 focus:ring-blue-400"
                   />
                 </div>
               </div>
@@ -265,7 +213,7 @@ const AddCustomermodal: React.FC<props> = ({
               <div className="flex flex-row position-relative justify-end items-end align-bottom self-end">
                 <button
                   type="submit"
-                  className="bg-blue-500 text-white px-4 py-2 rounded-md mr-2"
+                  className="bg-blue-500 text-white px-4 py-2 rounded-md mr-2 mt-2"
                   onClick={() => {
                     formik.handleSubmit;
                   }}
@@ -273,11 +221,8 @@ const AddCustomermodal: React.FC<props> = ({
                   Save
                 </button>
                 <button
-                  className="bg-gray-500 text-white px-4 py-2 rounded-md"
-                  onClick={() => {
-                    formik.resetForm;
-                    isclose;
-                  }}
+                  className="bg-gray-500 text-white px-4 py-2 rounded-md mt-2"
+                  onClick={isclose}
                 >
                   Cancel
                 </button>
@@ -285,14 +230,14 @@ const AddCustomermodal: React.FC<props> = ({
             )}
             {view && (
               <button
-                className="text-slate-800 bg-white p-3  font-bold  rounded-lg  w-1/2"
+                className="text-[#183642] bg-white bg-opacity-50 p-3  font-bold  rounded-lg mt-2 w-1/3"
                 onClick={() => {
                   handleOpenModal();
                 }}
               >
                 {" "}
                 See project Details
-                <span className="text-red-600 animate-aurora pl-3">
+                <span className="text-red-600 animate-aurora pl-3 mt-2">
                   {">> >>"}
                 </span>
               </button>
