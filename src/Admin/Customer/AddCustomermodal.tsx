@@ -44,35 +44,28 @@ const AddCustomermodal: React.FC<props> = ({
       mobileno: selectedCustomer?.mobileno || "",
       officeno: selectedCustomer?.officeno || "",
     },
+
     onSubmit: async (values, { resetForm }) => {
       try {
         if (selectedCustomer?.customer_ID) {
-          console.log(selectedCustomer.customer_ID);
           const resonponse = await axios.put(
             `${API_URL}/Customer/${selectedCustomer.customer_ID}`,
             values
           );
-          console.log("response", resonponse);
 
           toast.success("Customer updated Successfully");
-          resetPageToFirst();
-          fetchcustomer();
         } else {
-          console.log(selectedCustomer.id);
           const resonponse = await axios.post(`${API_URL}/Customer`, values);
           console.log("response", resonponse);
 
           toast.success("Customer added Successfully");
-          resetPageToFirst();
-          fetchcustomer();
         }
+        resetPageToFirst();
+        fetchcustomer();
         isclose();
       } catch (error) {
         console.log(error);
         toast.error("Error");
-      } finally {
-        {
-        }
       }
     },
   });

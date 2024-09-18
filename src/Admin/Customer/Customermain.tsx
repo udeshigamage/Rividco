@@ -22,6 +22,7 @@ const Customermain = () => {
   const [customer, setcustomer] = useState<any[]>([]);
   const [isloading, setisloading] = useState(false);
   const [selectedcustomer, setselectedcustomer] = useState({});
+  const [deletecustomer, setdeletecustomer] = useState(false);
   const pageSize = 9;
   const [view, setview] = useState(false);
   const handleOpenModal = (item: any) => {
