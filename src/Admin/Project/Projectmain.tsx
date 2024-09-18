@@ -13,82 +13,15 @@ import {
 import { toast } from "react-toastify";
 import AddProject from "./Addproject";
 import { useNavigate } from "react-router-dom";
-
+const API_URL = import.meta.env.VITE_API_URL;
 const Projectmain = () => {
-  const data = [
-    {
-      id: "1",
-      customer: "John Doe",
-      description: "Office Supplies Purchase",
-      location: "Colombo",
-      coordinator: "Sarah Smith",
-      startdate: "2025-02-01",
-      warranty_period: "1 year",
-      status: "In Progress",
-      estimatedcost: 5000,
-      referencedby: "Michael Johnson",
-      comment: "need attention",
-    },
-    {
-      id: "2",
-      customer: "Alice Brown",
-      description: "Event Management Service",
-      location: "Kandy",
-      coordinator: "James Wilson",
-      startdate: "2025-01-15",
-      warranty_period: "6 months",
-      status: "Completed",
-      estimatedcost: 8000,
-      referencedby: "John Lee",
-      comment: "need attention",
-    },
-    {
-      id: "3",
-      customer: "David Clark",
-      description: "IT Infrastructure Setup",
-      location: "Jaffna",
-      coordinator: "Emma Davis",
-      startdate: "2025-03-05",
-      warranty_period: "2 years",
-      status: "Pending",
-      estimatedcost: 15000,
-      referencedby: "Sophia Miller",
-      comment: "need attention",
-    },
-    {
-      id: "4",
-      customer: "Sophia Taylor",
-      description: "Catering Services",
-      location: "Galle",
-      coordinator: "Liam Martinez",
-      startdate: "2025-04-10",
-      warranty_period: "7 years",
-      status: "In Progress",
-      estimatedcost: 3000,
-      referencedby: "Olivia Thomas",
-      comment: "need attention",
-    },
-    {
-      id: "5",
-      customer: "Michael Johnson",
-      description: "Software Development Project",
-      location: "Negombo",
-      coordinator: "Emily Anderson",
-      startdate: "2025-01-20",
-      warranty_period: "3 years",
-      status: "Completed",
-      estimatedcost: 20000,
-      referencedby: "Daniel White",
-      comment: "need attention",
-    },
-  ];
-
   const [ismodelopen, setmodelopen] = useState<boolean>(false);
   const [ismodelconfirmopen, setmodelconfirmopen] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [totalItems, settotalitems] = useState(0);
-  const [project, setproject] = useState({});
+  const [project, setproject] = useState<any[]>([]);
+  const [customer, setcustomer] = useState<any[]>([]);
   const [isloading, setisloading] = useState(false);
   const [selectedproject, setselectedproject] = useState({});
   const pageSize = 5;
@@ -103,16 +36,25 @@ const Projectmain = () => {
     setisloading(true);
     try {
       const response = await axios.get(
-        `http://localhost:3000/api/Employee?page=${page}&pageSize=${pageSize}`
+        `${API_URL}/Project?page=${page}&pageSize=${pageSize}`
       );
+      const response2 = await axios.get(
+        `${API_URL}/Customer?page=${page}&pageSize=${pageSize}`
+      );
+      setcustomer(response2.data.data);
 
-      setproject(response.data);
+      setproject(response.data.data);
+      setTotalPages(response.data.totalPages);
+      settotalitems(response.data.totalItems);
     } catch (error) {
       console.log(error);
       toast.error("Something went wrong");
     } finally {
       setisloading(false);
     }
+  };
+  const resetPageToFirst = () => {
+    setCurrentPage(1);
   };
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= totalPages) {
@@ -191,7 +133,7 @@ const Projectmain = () => {
           </tbody>
         ) : (
           <>
-            {data.map((item, index) => (
+            {project.map((item, index) => (
               <tbody
                 key={index}
                 className="border-collapse border font-semibold font-mono border-[#183642] border-x-1 border-y-1 text-center align-middle "
@@ -203,16 +145,16 @@ const Projectmain = () => {
                   }}
                 >
                   <td className="border-collapse border border-[#183642] border-x-1 border-y-1 ">
-                    {item.id}
+                    {item.project_ID}
                   </td>
                   <td className="border-collapse border border-[#183642] border-x-1 border-y-1">
-                    {item.customer}
+                    {item.customer_ID}
                   </td>
                   <td className="border-collapse border border-[#183642] border-x-1 border-y-1 ">
                     {item.location}{" "}
                   </td>
                   <td className="border-collapse border border-[#183642] border-x-1 border-y-1 ">
-                    {item.coordinator}
+                    {item.coordinator_ID}
                   </td>
                   <td className="">{item.status}</td>
                   <td className="border-collapse border border-[#183642] border-x-1 border-y-1 text-start m-2 ">
@@ -287,6 +229,11 @@ const Projectmain = () => {
           isclose={handleCloseModal}
           selectedproject={selectedproject}
           view={view}
+          fetchproject={() => {
+            fetchcustomer(currentPage);
+          }}
+          resetPageToFirst={resetPageToFirst}
+          customer={customer}
         />
       )}
       {ismodelconfirmopen && (

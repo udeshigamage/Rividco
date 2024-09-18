@@ -10,22 +10,29 @@ type props = {
   isclose: () => void;
   selectedproject: any;
   view: boolean;
+  fetchproject: () => void;
+  resetPageToFirst: () => void;
+  customer: any;
 };
+const API_URL = import.meta.env.VITE_API_URL;
 
 const AddProject: React.FC<props> = ({
   isopen,
   isclose,
   selectedproject,
   view,
+  fetchproject,
+  resetPageToFirst,
+  customer,
 }) => {
   if (!isopen) return null;
 
   const formik = useFormik({
     initialValues: {
-      customer: selectedproject?.customer || "",
-      description: selectedproject?.description || "",
+      customer: selectedproject?.customer_ID || "",
+      Address: selectedproject?.Address || "",
       location: selectedproject?.location || "",
-      coordinator: selectedproject?.coordinator || "",
+      Coordinator_ID: selectedproject?.coordinator || "",
       startdate: selectedproject?.startdate || "",
       warranty_period: selectedproject?.warranty_period || "",
       status: selectedproject?.status || "",
@@ -38,22 +45,22 @@ const AddProject: React.FC<props> = ({
       try {
         if (selectedproject?.id) {
           const resonponse = await axios.put(
-            "http://localhost:3000/api/customer",
+            `${API_URL}/Project/${selectedproject.Project_ID}`,
             values
           );
-          console.log("response", resonponse);
-          toast.success("Customer updated Successfully");
+
+          toast.success("Project updated Successfully");
         } else {
-          const resonponse = await axios.post(
-            "http://localhost:3000/api/customer",
-            values
-          );
-          console.log("response", resonponse);
-          toast.success("Customer added Successfully");
+          const response = await axios.post(`${API_URL}/Project`, values);
+
+          toast.success("Project added Successfully");
         }
+        fetchproject();
+        resetPageToFirst();
+        isclose();
       } catch (error) {
         console.log(error);
-        toast.success("Customer Added Successfully");
+        toast.error("Failes to save project");
       }
     },
   });
@@ -91,11 +98,20 @@ const AddProject: React.FC<props> = ({
                   <label className="text-gray-700 font-semibold">
                     Customer
                   </label>
-                  <select className="p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
-                    <option defaultChecked>Select Customer</option>
-                    <option value={"john"}>John</option>
-                    <option>Eric</option>
-                    <option>Samuel</option>
+                  <select
+                    name="customer"
+                    value={formik.values.customer}
+                    onChange={formik.handleChange}
+                    className="w-full p-2 border border-gray-300 rounded-md"
+                    required
+                    disabled={view}
+                  >
+                    <option value="">Select a customer</option>
+                    {customer.map((item: any) => (
+                      <option key={item.customer_ID} value={item.customer_ID}>
+                        {item.firstName}
+                      </option>
+                    ))}
                   </select>
                 </div>
 
@@ -106,10 +122,10 @@ const AddProject: React.FC<props> = ({
                   <textarea
                     cols={50}
                     rows={2}
-                    id="description"
-                    name="description"
+                    id="Address"
+                    name="Address"
                     onChange={formik.handleChange}
-                    value={formik.values.description}
+                    value={formik.values.Address}
                     disabled={view}
                     className="p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
                   />
@@ -134,11 +150,20 @@ const AddProject: React.FC<props> = ({
                   <label className="text-gray-700 font-semibold">
                     Coordinator
                   </label>
-                  <select className="p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
-                    <option defaultChecked>Select Coordinator</option>
-                    <option>John</option>
-                    <option>Eric</option>
-                    <option>Samuel</option>
+                  <select
+                    name="Coordinator_ID"
+                    value={formik.values.Coordinator_ID}
+                    onChange={formik.handleChange}
+                    className="w-full p-2 border border-gray-300 rounded-md"
+                    required
+                    disabled={view}
+                  >
+                    <option value="">Select a coordinator</option>
+                    {customer.map((item: any) => (
+                      <option key={item.customer_ID} value={item.customer_ID}>
+                        {item.firstName}
+                      </option>
+                    ))}
                   </select>
                 </div>
 
@@ -220,17 +245,19 @@ const AddProject: React.FC<props> = ({
                     Reference By
                   </label>
                   <select
-                    className="p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
                     name="referencedby"
-                    id="referencedby"
                     value={formik.values.referencedby}
                     onChange={formik.handleChange}
+                    className="w-full p-2 border border-gray-300 rounded-md"
+                    required
+                    disabled={view}
                   >
-                    <option>Select Referenced by</option>
-                    <option>John</option>
-
-                    <option>Eric</option>
-                    <option>Samuel</option>
+                    <option value="">Select a reference</option>
+                    {customer.map((item: any) => (
+                      <option key={item.customer_ID} value={item.customer_ID}>
+                        {item.firstName}
+                      </option>
+                    ))}
                   </select>
                 </div>
               </div>
