@@ -10,44 +10,49 @@ type props = {
   isclose: () => void;
   selectedCustomer: any;
   view: boolean;
+  fetchcustomer: () => void;
+  resetPageToFirst: () => void;
 };
-
+const API_URL = import.meta.env.VITE_API_URL;
 const Addvendor: React.FC<props> = ({
   isopen,
   isclose,
   selectedCustomer,
   view,
+  fetchcustomer,
+  resetPageToFirst,
 }) => {
   if (!isopen) return null;
 
   const formik = useFormik({
     initialValues: {
-      FirstName: selectedCustomer?.FirstName || "",
-      LastName: selectedCustomer?.LastName || "",
+      firstName: selectedCustomer?.firstName || "",
+      lastName: selectedCustomer?.lastName || "",
       email: selectedCustomer?.email || "",
-      Address: selectedCustomer?.Address || "",
-      category: selectedCustomer?.category || "",
+      address: selectedCustomer?.address || "",
       comment: selectedCustomer?.comment || "",
+      category: selectedCustomer?.category || "",
       mobileno: selectedCustomer?.mobileno || "",
       officeno: selectedCustomer?.officeno || "",
     },
     onSubmit: async (values) => {
       // alert(JSON.stringify(values, null, 2));
       try {
-        if (selectedCustomer?.id) {
+        if (selectedCustomer?.vendor_ID) {
           const resonponse = await axios.put(
-            "http://localhost:3000/api/customer",
+            `${API_URL}/Vendor/${selectedCustomer.vendor_ID}`,
             values
           );
           console.log("response", resonponse);
           toast.success("Customer updated Successfully");
+          resetPageToFirst();
+          fetchcustomer();
         } else {
-          const resonponse = await axios.post(
-            "http://localhost:3000/api/customer",
-            values
-          );
+          const resonponse = await axios.post(`${API_URL}/Vendor`, values);
           console.log("response", resonponse);
           toast.success("Customer added Successfully");
+          resetPageToFirst();
+          fetchcustomer();
         }
       } catch (error) {
         console.log(error);
@@ -60,7 +65,7 @@ const Addvendor: React.FC<props> = ({
       <ToastContainer position="top-right" />
       <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50">
         <form onSubmit={formik.handleSubmit}>
-          <div className="bg-slate-900 bg-opacity-95 p-5 rounded-lg shadow-lg w-auto h-5/6 m-1 flex flex-col text-white ">
+          <div className="bg-[#183642] bg-opacity-95 p-5 rounded-lg shadow-lg w-[800px] h-[650px] m-1 flex flex-col text-white ">
             <div className="flex flex-col ">
               <button
                 onClick={isclose}
@@ -81,116 +86,119 @@ const Addvendor: React.FC<props> = ({
               </button>
             </div>
             <h2 className="text-2xl font-semibold self-center font-serif">
-              {view ? "View" : selectedCustomer?.id ? "Edit" : "Add"} Vendor
+              {view ? "View" : selectedCustomer?.vendor_ID ? "Edit" : "Add"}{" "}
+              Vendor
             </h2>
-            <div className="flex flex-row position-relative my-4 gap-5">
-              <div className="flex flex-row position-relative">
-                <label className=" w-2/5 flex  items-center">First Name</label>
-                <input
-                  id="FirstName"
-                  name="FirstName"
-                  type="text"
-                  placeholder="First Name"
-                  onChange={formik.handleChange}
-                  value={formik.values.FirstName}
-                  disabled={view}
-                  className="border-2  border-black w-3/4 rounded-lg p-2"
-                />
-              </div>
+            <div className="flex flex-col gap-4 p-4 bg-white rounded-2xl w-[750px] h-[500px] shadow-md">
+              {/* Existing Customer Form Code */}
 
-              <div className="flex flex-row position-relative">
-                <label className=" w-1/2 flex  items-center">Last Name</label>
-                <input
-                  id="LastName"
-                  name="LastName"
-                  type="text"
-                  placeholder="Last Name"
-                  onChange={formik.handleChange}
-                  value={formik.values.LastName}
-                  disabled={view}
-                  className="border-2  border-black w-3/4 rounded-lg p-2"
-                />
-              </div>
-            </div>
+              <div className="flex flex-col gap-4 mt-6">
+                <div className="flex gap-5 mb-4">
+                  <div className="flex flex-col gap-1 w-1/2">
+                    <label className="text-gray-700 font-semibold">
+                      First Name
+                    </label>
+                    <input
+                      id="firstName"
+                      name="firstName"
+                      type="text"
+                      placeholder="First Name"
+                      onChange={formik.handleChange}
+                      value={formik.values.firstName}
+                      disabled={view}
+                      className="border-2  border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-400"
+                    />
+                  </div>
 
-            <div className="flex flex-row position-relative mb-4 gap-2">
-              <div className="flex flex-row position-relative">
-                <label className=" w-2/5 flex  items-center ">Email</label>
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  placeholder="Email"
-                  onChange={formik.handleChange}
-                  value={formik.values.email}
-                  disabled={view}
-                  className="border-2  border-black w-4/5 rounded-lg p-2 m-3 flex  justify-items-start"
-                />
-              </div>
-            </div>
-            <div className="flex flex-row position-relative mb-4 gap-2">
-              <div className="flex flex-row position-relative">
-                <label className=" w-2/5 flex  items-center ">Mobile no</label>
-                <input
-                  type="tel"
-                  placeholder="(+94) 767 123 456"
-                  id="mobileno"
-                  name="mobileno"
-                  onChange={formik.handleChange}
-                  value={formik.values.mobileno}
-                  disabled={view}
-                  className="border-2  border-black w-3/4 rounded-lg p-2 flex  justify-items-start"
-                />
-              </div>
+                  <div className="flex flex-col gap-1 w-1/2">
+                    <label className="text-gray-700 font-semibold">
+                      Last Name
+                    </label>
+                    <input
+                      id="lastName"
+                      name="lastName"
+                      type="text"
+                      placeholder="Last Name"
+                      onChange={formik.handleChange}
+                      value={formik.values.lastName}
+                      disabled={view}
+                      className="border-2 border-gray-300  rounded-lg p-2 focus:ring-2 focus:ring-blue-400"
+                    />
+                  </div>
+                </div>
 
-              <div className="flex flex-row position-relative">
-                <label className=" w-1/2 flex  items-center ">Office no</label>
-                <input
-                  id="officeno"
-                  name="officeno"
-                  onChange={formik.handleChange}
-                  value={formik.values.officeno}
-                  type="tel"
-                  placeholder="(+94) 767 123 456"
-                  disabled={view}
-                  className="border-2 text-white border-black w-3/4 rounded-lg p-2"
-                />
+                <div className="flex gap-5 mb-4">
+                  <div className="flex flex-col gap-1 w-1/2">
+                    <label className="text-gray-700 font-semibold">Email</label>
+                    <input
+                      id="email"
+                      name="email"
+                      type="email"
+                      placeholder="Email"
+                      onChange={formik.handleChange}
+                      value={formik.values.email}
+                      disabled={view}
+                      className="border-2 border-gray-300  rounded-lg p-2 focus:ring-2 focus:ring-blue-400"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex gap-5 mb-4">
+                  <div className="flex flex-col gap-1 w-1/2">
+                    <label className="text-gray-700 font-semibold">
+                      Mobile No
+                    </label>
+                    <input
+                      id="mobileno"
+                      name="mobileno"
+                      type="tel"
+                      placeholder="(+94) 767 123 456"
+                      onChange={formik.handleChange}
+                      value={formik.values.mobileno}
+                      disabled={view}
+                      className="border-2 border-gray-300 rounded-lg p-2  focus:ring-2 focus:ring-blue-400"
+                    />
+                  </div>
+
+                  <div className="flex flex-col gap-1 w-1/2">
+                    <label className="text-gray-700 font-semibold">
+                      Office No
+                    </label>
+                    <input
+                      id="officeno"
+                      name="officeno"
+                      type="tel"
+                      placeholder="(+94) 767 123 456"
+                      onChange={formik.handleChange}
+                      value={formik.values.officeno}
+                      disabled={view}
+                      className="border-2 border-gray-300  rounded-lg p-2 focus:ring-2 focus:ring-blue-400"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-1 mb-4">
+                  <label className="text-gray-700 font-semibold">Address</label>
+                  <textarea
+                    id="address"
+                    name="address"
+                    rows={2}
+                    cols={50}
+                    placeholder="Enter Address"
+                    onChange={formik.handleChange}
+                    value={formik.values.address}
+                    disabled={view}
+                    className="border-2 border-gray-300  rounded-lg p-2 focus:ring-2 focus:ring-blue-400"
+                  />
+                </div>
               </div>
-            </div>
-            <div className="flex flex-row position-relative mb-4">
-              <label className=" w-1/6 flex  items-center">Address</label>
-              <textarea
-                id="Address"
-                name="Address"
-                onChange={formik.handleChange}
-                value={formik.values.Address}
-                rows={2}
-                cols={50}
-                disabled={view}
-                placeholder="Enter Address"
-                className="border-2  text-white border-black w-3/4 rounded-lg  p-2"
-              />
-            </div>
-            <div className="flex flex-row position-relative mb-4">
-              <label className=" w-1/6 flex  items-center ">Comments</label>
-              <textarea
-                id="comment"
-                name="comment"
-                onChange={formik.handleChange}
-                value={formik.values.comment}
-                rows={2}
-                cols={50}
-                placeholder="Comments"
-                disabled={view}
-                className="border-2  text-white border-black w-3/4 rounded-lg p-2 flex  justify-items-start"
-              />
             </div>
 
             {!view && (
               <div className="flex flex-row position-relative justify-end items-end align-bottom self-end">
                 <button
                   type="submit"
-                  className="bg-blue-500 text-white px-4 py-2 rounded-md mr-2"
+                  className="bg-blue-500  px-4 py-2 rounded-md mr-2 mt-2"
                   onClick={() => {
                     formik.handleSubmit;
                   }}
@@ -198,11 +206,8 @@ const Addvendor: React.FC<props> = ({
                   Save
                 </button>
                 <button
-                  className="bg-gray-500 text-white px-4 py-2 rounded-md"
-                  onClick={() => {
-                    formik.resetForm;
-                    isclose;
-                  }}
+                  className="bg-gray-500  px-4 py-2 rounded-md mt-2"
+                  onClick={isclose}
                 >
                   Cancel
                 </button>
