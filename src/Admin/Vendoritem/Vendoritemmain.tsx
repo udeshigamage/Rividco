@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { FaEdit, FaEye } from "react-icons/fa";
 import { FaDeleteLeft } from "react-icons/fa6";
 import { IoIosAdd } from "react-icons/io";
 
 import DeleteConfirmationmodal from "../../Utils/DeleteConfirmationmodal";
 import axios from "axios";
-import { GrCaretNext, GrCaretPrevious } from "react-icons/gr";
+
 import {
   TbPlayerTrackNextFilled,
   TbPlayerTrackPrevFilled,
@@ -14,64 +14,13 @@ import { toast } from "react-toastify";
 import Addvendor from "./Addvendoritem";
 
 const Vendoritemmain = () => {
-  const data = [
-    {
-      id: 1,
-      item_name: "Solar Panel",
-      Vendor: "Williams",
-      Vendor_address: "Gampaha, Sri Lanka",
-      Price: 5000,
-      capacity: "100KW",
-      Warranty_duration: "1 year",
-      comments: "comments",
-    },
-    {
-      id: 2,
-      item_name: "Inverter",
-      Vendor: "GreenTech",
-      Vendor_address: "Colombo, Sri Lanka",
-      Price: 12000,
-      capacity: "200KW",
-      Warranty_duration: "2 years",
-      comments: "comments",
-    },
-    {
-      id: 3,
-      item_name: "Battery",
-      Vendor: "PowerCell",
-      Vendor_address: "Kandy, Sri Lanka",
-      Price: 8000,
-      capacity: "150KW",
-      Warranty_duration: "3 years",
-      comments: "comments",
-    },
-    {
-      id: 4,
-      item_name: "Charge Controller",
-      Vendor: "EcoPower",
-      Vendor_address: "Negombo, Sri Lanka",
-      Price: 3000,
-      capacity: "50KW",
-      Warranty_duration: "1.5 years",
-      comments: "comments",
-    },
-    {
-      id: 5,
-      item_name: "Mounting Structure",
-      Vendor: "SolarMount",
-      Vendor_address: "Jaffna, Sri Lanka",
-      Price: 2500,
-      capacity: "N/A",
-      Warranty_duration: "5 years",
-      comments: "comments",
-    },
-  ];
   const [ismodelopen, setmodelopen] = useState<boolean>(false);
   const [ismodelconfirmopen, setmodelconfirmopen] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [totalItems, settotalitems] = useState(0);
-  const [item, setitem] = useState({});
+  const [vendor, setvendor] = useState<any[]>([]);
+  const [item, setitem] = useState<any[]>([]);
   const [isloading, setisloading] = useState(false);
   const [selecteditem, setselecteditem] = useState({});
   const pageSize = 5;
@@ -82,14 +31,20 @@ const Vendoritemmain = () => {
 
     setmodelopen(true);
   };
+  const API_URL = import.meta.env.VITE_API_URL;
   const fetchitem = async (page: number) => {
     setisloading(true);
     try {
       const response = await axios.get(
-        `http://localhost:3000/api/Employee?page=${page}&pageSize=${pageSize}`
+        `${API_URL}/Vendoritem?page=${page}&pageSize=${pageSize}`
       );
-
-      setitem(response.data);
+      const response2 = await axios.get(
+        `${API_URL}/Vendor?page=${page}&pageSize=${pageSize}`
+      );
+      setvendor(response2.data.data);
+      setitem(response.data.data);
+      setTotalPages(response.data.totalPages);
+      settotalitems(response.data.totalItems);
     } catch (error) {
       console.log(error);
       toast.error("Something went wrong");
@@ -101,6 +56,10 @@ const Vendoritemmain = () => {
     if (page >= 1 && page <= totalPages) {
       setCurrentPage(page);
     }
+  };
+
+  const resetPageToFirst = () => {
+    setCurrentPage(1);
   };
   useEffect(() => {
     fetchitem(currentPage);
@@ -172,7 +131,7 @@ const Vendoritemmain = () => {
           </tbody>
         ) : (
           <>
-            {data.map((item, index) => (
+            {item.map((item, index) => (
               <tbody
                 key={index}
                 className="border-collapse border font-semibold font-mono border-[#183642] border-x-1 border-y-1 text-center align-middle "
@@ -182,17 +141,17 @@ const Vendoritemmain = () => {
                     {item.item_name}
                   </td>
                   <td className="border-collapse border border-[#183642] border-x-1 border-y-1">
-                    {item.Vendor}
+                    {item.vendor.firstName}
                   </td>
 
                   <td className="border-collapse border border-[#183642] border-x-1 border-y-1">
-                    {item.Price}
+                    {item.price}
                   </td>
                   <td className="border-collapse border border-[#183642] border-x-1 border-y-1">
                     {item.capacity}
                   </td>
                   <td className="border-collapse border border-[#183642] border-x-1 border-y-1">
-                    {item.Warranty_duration}
+                    {item.warranty_duration}
                   </td>
                   <td className="border-collapse border border-[#183642] border-x-1 border-y-1 text-start m-2 ">
                     <div className="flex flex-row position-relative flex flex-row justify-center items-center">
@@ -257,6 +216,9 @@ const Vendoritemmain = () => {
           isclose={handleCloseModal}
           selecteditem={selecteditem}
           view={view}
+          fetchitem={() => fetchitem(currentPage)}
+          resetPageToFirst={resetPageToFirst}
+          vendor={vendor}
         />
       )}
       {ismodelconfirmopen && (
