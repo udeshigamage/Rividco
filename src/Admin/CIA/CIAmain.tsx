@@ -14,6 +14,7 @@ import { toast } from "react-toastify";
 import AddCIA from "./AddCIA";
 import { comment } from "postcss";
 
+const API_URL = import.meta.env.VITE_API_URL;
 const CIAmain = () => {
   const customers = [
     {
@@ -88,7 +89,7 @@ const CIAmain = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [totalItems, settotalitems] = useState(0);
-  const [customer, setcustomer] = useState({});
+  const [customer, setcustomer] = useState<any[]>([]);
   const [isloading, setisloading] = useState(false);
   const [selectedcustomer, setselectedcustomer] = useState({});
   const [view, setview] = useState(false);
@@ -103,10 +104,13 @@ const CIAmain = () => {
     setisloading(true);
     try {
       const response = await axios.get(
-        `http://localhost:3000/api/Employee?page=${page}&pageSize=${pageSize}`
+        `${API_URL}/ProjectCIA/?page=${page}&pageSize=${pageSize}`
       );
 
-      setcustomer(response.data);
+      setcustomer(response.data.data);
+
+      setTotalPages(response.data.totalPages);
+      settotalitems(response.data.totalItems);
     } catch (error) {
       console.log(error);
       toast.error("Something went wrong");
@@ -172,14 +176,14 @@ const CIAmain = () => {
               Added Date
             </th>
             <th className="border-collapse border border-[#183642] border-x-2 border-y-2 w-28 ">
-              Status
+              Urgency level
             </th>
             <th className="border-collapse border border-[#183642] border-x-2 border-y-2 w-28 ">
               Assigned to
             </th>
 
             <th className="border-collapse border border-[#183642] border-x-2 border-y-2 w-28 ">
-              Callback no
+              Project Id
             </th>
             <th className="border-collapse border border-[#183642] border-x-2 border-y-2 w-28 ">
               Action
@@ -198,33 +202,33 @@ const CIAmain = () => {
           </tbody>
         ) : (
           <>
-            {customers.map((item, index) => (
+            {customer.map((item, index) => (
               <tbody
                 key={index}
                 className="border-collapse border font-semibold font-mono border-[#183642] border-x-1 border-y-1 text-center align-middle "
               >
                 <tr className="border-collapse border border-[#183642] border-x-1 border-y-1">
                   <td className="border-collapse border border-[#183642] border-x-1 border-y-1">
-                    {item.Taskid}
+                    {item.task_ID}
                   </td>
                   <td className="border-collapse border border-[#183642] border-x-1 border-y-1">
-                    {item.Category}
+                    {item.category}
                   </td>
                   <td className="border-collapse border border-[#183642] border-x-1 border-y-1">
-                    {item.Requestedby}{" "}
+                    {item.requestedby}{" "}
                   </td>
-                  <td>{item.Addedby}</td>
+                  <td>{item.addedby}</td>
                   <td className="border-collapse border border-[#183642] border-x-1 border-y-1">
-                    {item.Addeddate}{" "}
-                  </td>
-                  <td className="border-collapse border border-[#183642] border-x-1 border-y-1">
-                    {item.Status}{" "}
+                    {item.addedDate}{" "}
                   </td>
                   <td className="border-collapse border border-[#183642] border-x-1 border-y-1">
-                    {item.Assignedto}{" "}
+                    {item.urgencylevel}{" "}
                   </td>
                   <td className="border-collapse border border-[#183642] border-x-1 border-y-1">
-                    {item.Callbackno}{" "}
+                    {item.assignedto}{" "}
+                  </td>
+                  <td className="border-collapse border border-[#183642] border-x-1 border-y-1">
+                    {item.project.project_ID}{" "}
                   </td>
                   <td className="border-collapse border border-[#183642] border-x-1 border-y-1 text-start m-2 ">
                     <div className="flex flex-row position-relative flex flex-row justify-center items-center">

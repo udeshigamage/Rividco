@@ -11,9 +11,13 @@ import {
   TbPlayerTrackPrevFilled,
 } from "react-icons/tb";
 import { toast } from "react-toastify";
-import AddProject from "./Addprojectitem";
-
-const Projectciamain = () => {
+import AddProject from "./Addprojectcia";
+import AddProjectcia from "./Addprojectcia";
+const API_URL = import.meta.env.VITE_API_URL;
+type Props = {
+  project: any;
+};
+const Projectciamain: React.FC<Props> = ({ project }) => {
   const data = [
     {
       id: "2",
@@ -57,7 +61,7 @@ const Projectciamain = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [totalItems, settotalitems] = useState(0);
-  const [project, setproject] = useState({});
+  const [projecte, setprojecte] = useState<any[]>([]);
   const [isloading, setisloading] = useState(false);
   const [selectedproject, setselectedproject] = useState({});
   const pageSize = 5;
@@ -72,10 +76,12 @@ const Projectciamain = () => {
     setisloading(true);
     try {
       const response = await axios.get(
-        `http://localhost:3000/api/Employee?page=${page}&pageSize=${pageSize}`
+        `${API_URL}/ProjectCIA/project-tasks/${project.project_ID}?page=${page}&pageSize=${pageSize}`
       );
 
-      setproject(response.data);
+      setprojecte(response.data.data);
+      setTotalPages(response.data.totalPages);
+      settotalitems(response.data.totalItems);
     } catch (error) {
       console.log(error);
       toast.error("Something went wrong");
@@ -87,6 +93,9 @@ const Projectciamain = () => {
     if (page >= 1 && page <= totalPages) {
       setCurrentPage(page);
     }
+  };
+  const resetPageToFirst = () => {
+    setCurrentPage(1);
   };
   useEffect(() => {
     fetchcustomer(currentPage);
@@ -132,13 +141,13 @@ const Projectciamain = () => {
               Status
             </th>
             <th className="border-collapse border border-[#183642] border-x-2 border-y-2 w-52">
-              Added date
+              Requested by
             </th>
             <th className="border-collapse border border-[#183642] border-x-2 border-y-2 w-52">
               Added by
             </th>
             <th className="border-collapse border border-[#183642] border-x-2 border-y-2 w-52">
-              Comments
+              Urgency level
             </th>
             <th className="border-collapse border border-[#183642] border-x-2 border-y-2 w-52 ">
               Actions
@@ -157,25 +166,25 @@ const Projectciamain = () => {
           </tbody>
         ) : (
           <>
-            {data.map((item, index) => (
+            {projecte.map((item, index) => (
               <tbody
                 key={index}
                 className="border-collapse border font-semibold font-mono border-[#183642] border-x-1 border-y-1 text-center align-middle "
               >
                 <tr className="border-collapse border border-[#183642] border-x-1 border-y-1">
                   <td className="border-collapse border border-[#183642] border-x-1 border-y-1">
-                    {item.id}
+                    {item.task_ID}
                   </td>
                   <td className="border-collapse border border-[#183642] border-x-1 border-y-1">
-                    {item.customer}
+                    {item.status}
                   </td>
                   <td className="border-collapse border border-[#183642] border-x-1 border-y-1">
-                    {item.location}{" "}
+                    {item.requestedby}{" "}
                   </td>
                   <td className="border-collapse border border-[#183642] border-x-1 border-y-1">
-                    {item.coordinator}
+                    {item.addedby}
                   </td>
-                  <td>{item.status}</td>
+                  <td>{item.urgencylevel}</td>
                   <td className="border-collapse border border-[#183642] border-x-1 border-y-1 text-start m-2 ">
                     <div className="flex flex-row position-relative flex flex-row justify-center items-center">
                       <button
@@ -234,11 +243,14 @@ const Projectciamain = () => {
         </div>
       </div>
       {ismodelopen && (
-        <AddProject
+        <AddProjectcia
           isopen={ismodelopen}
           isclose={handleCloseModal}
           selectedproject={selectedproject}
           view={view}
+          project={project}
+          resetPageToFirst={resetPageToFirst}
+          fetchproject={() => fetchcustomer}
         />
       )}
       {ismodelconfirmopen && (
