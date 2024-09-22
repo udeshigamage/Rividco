@@ -148,7 +148,7 @@ const Projectmain = () => {
                     {item.project_ID}
                   </td>
                   <td className="border-collapse border border-[#183642] border-x-1 border-y-1">
-                    {item.customer_ID}
+                    {item.customer.firstName}
                   </td>
                   <td className="border-collapse border border-[#183642] border-x-1 border-y-1 ">
                     {item.location}{" "}
