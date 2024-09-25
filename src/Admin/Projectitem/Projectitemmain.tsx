@@ -13,51 +13,18 @@ import {
 import { toast } from "react-toastify";
 import AddProject from "./Addprojectitem";
 
-const Projectitemmain = () => {
-  const data = [
-    {
-      id: "2",
-      customer: "Alice",
-      location: "Kandy",
-      status: "completed",
-      coordinator: "James",
-    },
-    {
-      id: "3",
-      customer: "Michael",
-      location: "Galle",
-      status: "in progress",
-      coordinator: "Sarah",
-    },
-    {
-      id: "4",
-      customer: "Sophia",
-      location: "Jaffna",
-      status: "pending",
-      coordinator: "Robert",
-    },
-    {
-      id: "5",
-      customer: "David",
-      location: "Negombo",
-      status: "cancelled",
-      coordinator: "Emily",
-    },
-    {
-      id: "6",
-      customer: "Emma",
-      location: "Batticaloa",
-      status: "completed",
-      coordinator: "Daniel",
-    },
-  ];
-
+type Props = {
+  project: any;
+};
+const API_URL = import.meta.env.VITE_API_URL;
+const Projectitemmain: React.FC<Props> = ({ project }) => {
   const [ismodelopen, setmodelopen] = useState<boolean>(false);
   const [ismodelconfirmopen, setmodelconfirmopen] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [totalItems, settotalitems] = useState(0);
-  const [project, setproject] = useState({});
+  const [projecte, setprojecte] = useState<any[]>([]);
+  const [vendor, setvendors] = useState<any[]>([]);
   const [isloading, setisloading] = useState(false);
   const [selectedproject, setselectedproject] = useState({});
   const pageSize = 5;
@@ -72,10 +39,15 @@ const Projectitemmain = () => {
     setisloading(true);
     try {
       const response = await axios.get(
-        `http://localhost:3000/api/Employee?page=${page}&pageSize=${pageSize}`
+        `${API_URL}/Projectitem/project-item/${project.project_ID}?page=${page}&pageSize=${pageSize}`
       );
-
-      setproject(response.data);
+      const response2 = await axios.get(
+        `${API_URL}/Vendoritem?page=${page}&pageSize=${pageSize}`
+      );
+      setvendors(response2.data.data);
+      setprojecte(response.data.data);
+      setTotalPages(response.data.totalPages);
+      settotalitems(response.data.totalItems);
     } catch (error) {
       console.log(error);
       toast.error("Something went wrong");
@@ -99,7 +71,9 @@ const Projectitemmain = () => {
 
     setmodelconfirmopen(true);
   };
-
+  const resetPageToFirst = () => {
+    setCurrentPage(1);
+  };
   const handleCloseModal = () => {
     setmodelopen(false);
   };
@@ -126,7 +100,7 @@ const Projectitemmain = () => {
         <thead className="font-extrabold bg-white bg-opacity-35 rounded-lg">
           <tr>
             <th className="border-collapse border border-[#183642] border-x-2 border-y-2 p-5 w-28">
-              Vendor item
+              Project item id
             </th>
             <th className="border-collapse border border-[#183642] border-x-2 border-y-2 w-72">
               Serial no
@@ -135,10 +109,10 @@ const Projectitemmain = () => {
               Warranty period
             </th>
             <th className="border-collapse border border-[#183642] border-x-2 border-y-2 w-52">
-              Comments
+              Added date
             </th>
             <th className="border-collapse border border-[#183642] border-x-2 border-y-2 w-52">
-              Conducted date
+              Vendr item _name
             </th>
             <th className="border-collapse border border-[#183642] border-x-2 border-y-2 w-52 ">
               Actions
@@ -157,25 +131,25 @@ const Projectitemmain = () => {
           </tbody>
         ) : (
           <>
-            {data.map((item, index) => (
+            {projecte.map((item, index) => (
               <tbody
                 key={index}
                 className="border-collapse border font-semibold font-mono border-[#183642] border-x-1 border-y-1 text-center align-middle "
               >
                 <tr className="border-collapse border border-[#183642] border-x-1 border-y-1">
                   <td className="border-collapse border border-[#183642] border-x-1 border-y-1">
-                    {item.id}
+                    {item.projectitem_ID}
                   </td>
                   <td className="border-collapse border border-[#183642] border-x-1 border-y-1">
-                    {item.customer}
+                    {item.serialno}
                   </td>
                   <td className="border-collapse border border-[#183642] border-x-1 border-y-1">
-                    {item.location}{" "}
+                    {item.warranty_duration}{" "}
                   </td>
                   <td className="border-collapse border border-[#183642] border-x-1 border-y-1">
-                    {item.coordinator}
+                    {item.added_Date}
                   </td>
-                  <td>{item.status}</td>
+                  <td>{item.added_Date}</td>
                   <td className="border-collapse border border-[#183642] border-x-1 border-y-1 text-start m-2 ">
                     <div className="flex flex-row position-relative flex flex-row justify-center items-center">
                       <button
@@ -239,6 +213,10 @@ const Projectitemmain = () => {
           isclose={handleCloseModal}
           selectedproject={selectedproject}
           view={view}
+          resetPageToFirst={resetPageToFirst}
+          fetchproject={() => fetchcustomer}
+          vendor={vendor}
+          project={project}
         />
       )}
       {ismodelconfirmopen && (
