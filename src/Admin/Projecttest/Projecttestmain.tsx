@@ -11,9 +11,13 @@ import {
   TbPlayerTrackPrevFilled,
 } from "react-icons/tb";
 import { toast } from "react-toastify";
-import AddProject from "./Addprojectitem";
-
-const Projecttestmain = () => {
+import AddProject from "./Addprojecttest";
+import AddProjecttest from "./Addprojecttest";
+const API_URL = import.meta.env.VITE_API_URL;
+type Props = {
+  project: any;
+};
+const Projecttestmain: React.FC<Props> = ({ project }) => {
   const data = [
     {
       id: "2",
@@ -57,7 +61,7 @@ const Projecttestmain = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [totalItems, settotalitems] = useState(0);
-  const [project, setproject] = useState({});
+  const [projecte, setprojecte] = useState<any[]>([]);
   const [isloading, setisloading] = useState(false);
   const [selectedproject, setselectedproject] = useState({});
   const pageSize = 5;
@@ -72,10 +76,12 @@ const Projecttestmain = () => {
     setisloading(true);
     try {
       const response = await axios.get(
-        `http://localhost:3000/api/Employee?page=${page}&pageSize=${pageSize}`
+        `${API_URL}/Projecttest/project-test/${project.project_ID}?page=${page}&pageSize=${pageSize}`
       );
 
-      setproject(response.data);
+      setprojecte(response.data.data);
+      setTotalPages(response.data.totalPages);
+      settotalitems(response.data.totalItems);
     } catch (error) {
       console.log(error);
       toast.error("Something went wrong");
@@ -91,6 +97,9 @@ const Projecttestmain = () => {
   useEffect(() => {
     fetchcustomer(currentPage);
   }, [currentPage]);
+  const resetPageToFirst = () => {
+    setCurrentPage(1);
+  };
   const handleconfirmCloseModal = () => {
     setmodelconfirmopen(false);
   };
@@ -126,10 +135,10 @@ const Projecttestmain = () => {
         <thead className="font-extrabold bg-white bg-opacity-35 rounded-lg">
           <tr>
             <th className="border-collapse border border-[#183642] border-x-2 border-y-2 p-5 w-28">
-              Test no
+              Test ID
             </th>
             <th className="border-collapse border border-[#183642] border-x-2 border-y-2 w-72">
-              Result
+              Test name
             </th>
             <th className="border-collapse border border-[#183642] border-x-2 border-y-2 w-52">
               Conducted by
@@ -138,7 +147,7 @@ const Projecttestmain = () => {
               Conducted date
             </th>
             <th className="border-collapse border border-[#183642] border-x-2 border-y-2 w-52">
-              Status
+              result
             </th>
             <th className="border-collapse border border-[#183642] border-x-2 border-y-2 w-52 ">
               Actions
@@ -157,25 +166,25 @@ const Projecttestmain = () => {
           </tbody>
         ) : (
           <>
-            {data.map((item, index) => (
+            {projecte.map((item, index) => (
               <tbody
                 key={index}
                 className="border-collapse border font-semibold font-mono border-[#183642] border-x-1 border-y-1 text-center align-middle "
               >
                 <tr className="border-collapse border border-[#183642] border-x-1 border-y-1">
                   <td className="border-collapse border border-[#183642] border-x-1 border-y-1">
-                    {item.id}
+                    {item.projectTest_ID}
                   </td>
                   <td className="border-collapse border border-[#183642] border-x-1 border-y-1">
-                    {item.customer}
+                    {item.test_name}
                   </td>
                   <td className="border-collapse border border-[#183642] border-x-1 border-y-1">
-                    {item.location}{" "}
+                    {item.conducted_by}{" "}
                   </td>
                   <td className="border-collapse border border-[#183642] border-x-1 border-y-1">
-                    {item.coordinator}
+                    {item.conducted_date}
                   </td>
-                  <td>{item.status}</td>
+                  <td>{item.result}</td>
                   <td className="border-collapse border border-[#183642] border-x-1 border-y-1 text-start m-2 ">
                     <div className="flex flex-row position-relative flex flex-row justify-center items-center">
                       <button
@@ -234,11 +243,14 @@ const Projecttestmain = () => {
         </div>
       </div>
       {ismodelopen && (
-        <AddProject
+        <AddProjecttest
           isopen={ismodelopen}
           isclose={handleCloseModal}
           selectedproject={selectedproject}
           view={view}
+          resetPageToFirst={resetPageToFirst}
+          fetchproject={() => fetchcustomer}
+          project={project}
         />
       )}
       {ismodelconfirmopen && (
