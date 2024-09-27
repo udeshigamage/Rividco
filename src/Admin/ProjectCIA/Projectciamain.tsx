@@ -62,6 +62,7 @@ const Projectciamain: React.FC<Props> = ({ project }) => {
   const [totalPages, setTotalPages] = useState(0);
   const [totalItems, settotalitems] = useState(0);
   const [projecte, setprojecte] = useState<any[]>([]);
+  const [cutomer, setcustomer] = useState<any[]>([]);
   const [isloading, setisloading] = useState(false);
   const [selectedproject, setselectedproject] = useState({});
   const pageSize = 5;
@@ -78,6 +79,10 @@ const Projectciamain: React.FC<Props> = ({ project }) => {
       const response = await axios.get(
         `${API_URL}/ProjectCIA/project-tasks/${project.project_ID}?page=${page}&pageSize=${pageSize}`
       );
+      const response2 = await axios.get(
+        `${API_URL}/Customer?page=${page}&pageSize=${pageSize}`
+      );
+      setcustomer(response2.data.data);
 
       setprojecte(response.data.data);
       setTotalPages(response.data.totalPages);
@@ -251,6 +256,7 @@ const Projectciamain: React.FC<Props> = ({ project }) => {
           project={project}
           resetPageToFirst={resetPageToFirst}
           fetchproject={() => fetchcustomer}
+          customer={cutomer}
         />
       )}
       {ismodelconfirmopen && (

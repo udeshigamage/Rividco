@@ -8,59 +8,59 @@ import { IoIosAdd } from "react-icons/io";
 type props = {
   isopen: boolean;
   isclose: () => void;
-  selectedproject: any;
+  selectedCustomer: any;
   view: boolean;
   project: any;
   fetchproject: () => void;
   resetPageToFirst: () => void;
+  customer: any;
 };
 const API_URL = import.meta.env.VITE_API_URL;
 const AddProjectcia: React.FC<props> = ({
   isopen,
   isclose,
-  selectedproject,
+  selectedCustomer,
   view,
   project,
   fetchproject,
   resetPageToFirst,
+  customer,
 }) => {
   if (!isopen) return null;
 
   const formik = useFormik({
     initialValues: {
-      FirstName: selectedproject?.FirstName || "",
-      LastName: selectedproject?.LastName || "",
-      email: selectedproject?.email || "",
-      Address: selectedproject?.Address || "",
-      category: selectedproject?.category || "",
-      comment: selectedproject?.comment || "",
-      mobileno: selectedproject?.mobileno || "",
-      officeno: selectedproject?.officeno || "",
+      project_ID: selectedCustomer?.project_ID || "",
+      requestedby: selectedCustomer?.requestedby || "",
+      urgencylevel: selectedCustomer?.urgencylevel || "",
+      category: selectedCustomer?.category || "",
+      addeddate: selectedCustomer?.addeddate || "",
+      assignedto: selectedCustomer?.assignedto || "",
+      status: selectedCustomer?.status || "",
+      addedby: selectedCustomer?.addedby || "",
+      comment: selectedCustomer?.comment || "",
+      callbackno: selectedCustomer?.callbackno || "",
+      description: selectedCustomer?.description || "",
     },
     onSubmit: async (values) => {
-      // alert(JSON.stringify(values, null, 2));
+      alert(JSON.stringify(values, null, 2));
       try {
-        if (selectedproject?.id) {
-          const resonponse = await axios.put(
-            `${API_URL}/ProjectCIA/${selectedproject.projectitem_ID}`,
-            values
-          );
-          console.log("response", resonponse);
-          toast.success("Customer updated Successfully");
-        } else {
-          const resonponse = await axios.post(`${API_URL}/Projectitem`, values);
+        const response = await axios.put(
+          `${API_URL}/ProjectCIA/${selectedCustomer.task_ID}`,
+          values
+        );
 
-          toast.success("Customer added Successfully");
-        }
+        toast.success("CIA updated Successfully");
         fetchproject();
         resetPageToFirst();
         isclose();
       } catch (error) {
         console.log(error);
-        toast.success("Customer Added Successfully");
+        toast.success("CIA Added Successfully");
       }
     },
   });
+
   return (
     <div>
       <ToastContainer position="top-right" />
@@ -87,117 +87,188 @@ const AddProjectcia: React.FC<props> = ({
               </button>
             </div>
             <h2 className="text-2xl font-semibold self-center font-serif">
-              {view ? "View" : selectedproject?.id ? "Edit" : "Add"} Project
-              item
+              {view ? "View" : selectedCustomer?.task_ID ? "Edit" : "Add"}{" "}
+              Project item
             </h2>
             <div className="flex flex-row position-relative my-4 gap-5">
-              <div className="flex flex-row position-relative">
-                <label className=" w-2/5 flex  items-center">Customer</label>
-                <select>
-                  <option>First Name</option>
-                  <option>First Name</option>
-                  <option>First Name</option>
-                </select>
+              <div className="basis-1/2 flex flex-col gap-4">
+                <div className="flex flex-col gap-1">
+                  <label className="text-gray-700 font-semibold">
+                    Category
+                  </label>
+                  <select
+                    name="category"
+                    value={formik.values.category}
+                    onChange={formik.handleChange}
+                    className="w-full p-2 border border-gray-300 rounded-md"
+                    required
+                    disabled={view}
+                  >
+                    <option>Select Category</option>
+                    <option value={"complaint"}>Complaint</option>
+                    <option value={"inquiry"}>Inquiry</option>
+                    <option value={"activity"}>Activity</option>
+                  </select>
+                </div>
+
+                <div className="flex flex-col gap-1">
+                  <label className="text-gray-700 font-semibold">Addedby</label>
+                  <select
+                    name="addedby"
+                    value={formik.values.addedby}
+                    onChange={formik.handleChange}
+                    className="w-full p-2 border border-gray-300 rounded-md"
+                    required
+                    disabled={view}
+                  >
+                    <option value="">Select a Added by</option>
+                    {customer.map((item: any) => (
+                      <option key={item.customer_ID} value={item.customer_ID}>
+                        {item.firstName}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="flex flex-col gap-1">
+                  <label className="text-gray-700 font-semibold">
+                    Requestedby
+                  </label>
+                  <select
+                    name="requestedby"
+                    value={formik.values.requestedby}
+                    onChange={formik.handleChange}
+                    className="w-full p-2 border border-gray-300 rounded-md"
+                    required
+                    disabled={view}
+                  >
+                    <option value="">Select a Customer</option>
+                    {customer.map((item: any) => (
+                      <option key={item.customer_ID} value={item.customer_ID}>
+                        {item.firstName}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="flex flex-col gap-1">
+                  <label className="text-gray-700 font-semibold">
+                    Assigned to
+                  </label>
+                  <select
+                    name="assignedto"
+                    value={formik.values.assignedto}
+                    onChange={formik.handleChange}
+                    className="w-full p-2 border border-gray-300 rounded-md"
+                    required
+                    disabled={view}
+                  >
+                    <option value="">Select a Assigned to</option>
+                    {customer.map((item: any) => (
+                      <option key={item.customer_ID} value={item.customer_ID}>
+                        {item.firstName}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="flex flex-col gap-1">
+                  <label className="text-gray-700 font-semibold">
+                    Comments
+                  </label>
+                  <textarea
+                    cols={50}
+                    rows={2}
+                    id="comment"
+                    name="comment"
+                    onChange={formik.handleChange}
+                    value={formik.values.comment}
+                    disabled={view}
+                    className="p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  />
+                </div>
               </div>
 
-              <div className="flex flex-row position-relative">
-                <label className=" w-1/2 flex  items-center">Description</label>
-                <textarea
-                  id="comment"
-                  name="comment"
-                  onChange={formik.handleChange}
-                  value={formik.values.comment}
-                  disabled={view}
-                  className="border-2  border-black w-4/5 rounded-lg p-2 m-3 flex  justify-items-start"
-                />
-              </div>
-            </div>
+              <div className="basis-1/2 flex flex-col gap-4">
+                <div className="flex flex-col gap-1">
+                  <label className="text-gray-700 font-semibold">Status</label>
+                  <select
+                    name="status"
+                    value={formik.values.status}
+                    onChange={formik.handleChange}
+                    className="w-full p-2 border border-gray-300 rounded-md"
+                    required
+                    disabled={view}
+                  >
+                    <option>Select status</option>
+                    <option value={"Active"}>Active</option>
+                    <option value={"onhold"}>onhold</option>
+                    <option value={"rejected"}>rejected</option>
+                    <option value={"completed"}>completed</option>
+                    <option value={"waiting"}> waiting</option>
+                  </select>
+                </div>
 
-            <div className="flex flex-row position-relative mb-4 gap-2">
-              <div className="flex flex-row position-relative">
-                <label className=" w-2/5 flex  items-center ">Email</label>
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  placeholder="Email"
-                  onChange={formik.handleChange}
-                  value={formik.values.email}
-                  disabled={view}
-                  className="border-2  border-black w-4/5 rounded-lg p-2 m-3 flex  justify-items-start"
-                />
+                <div className="flex flex-col gap-1">
+                  <label className="text-gray-700 font-semibold">
+                    Urgency level
+                  </label>
+                  <select
+                    name="urgencylevel"
+                    value={formik.values.urgencylevel}
+                    onChange={formik.handleChange}
+                    className="w-full p-2 border border-gray-300 rounded-md"
+                    required
+                    disabled={view}
+                  >
+                    <option>Select Urgency level</option>
+                    <option value={"Critical"}>Critical</option>
+                    <option value={"High"}>High</option>
+                    <option value={"Low"}>Low</option>
+                    <option value={"Unknown"}>Unknown</option>
+                    <option value={"Neutral"}>Neutral</option>
+                  </select>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label className="text-gray-700 font-semibold">
+                    Added date
+                  </label>
+                  <input
+                    type="date"
+                    name="addeddate"
+                    value={formik.values.addeddate}
+                    onChange={formik.handleChange}
+                    disabled={view}
+                    className="w-full p-2 border border-gray-300 rounded-md"
+                  />
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label className="text-gray-700 font-semibold">
+                    Callbackno
+                  </label>
+                  <input
+                    type="tel"
+                    name="callbackno"
+                    value={formik.values.callbackno}
+                    onChange={formik.handleChange}
+                    disabled={view}
+                    className="w-full p-2 border border-gray-300 rounded-md"
+                  />
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label className="text-gray-700 font-semibold">
+                    Description
+                  </label>
+                  <input
+                    type="text"
+                    name="description"
+                    value={formik.values.description}
+                    onChange={formik.handleChange}
+                    disabled={view}
+                    className="w-full p-2 border border-gray-300 rounded-md"
+                  />
+                </div>
               </div>
-
-              <div className="flex flex-row position-relative gap-3">
-                <label className=" w-1/2 flex  items-center ">Category</label>
-                <select
-                  className="border-2 text-white border-black w-[160px] h-[44px] rounded-lg p-2 mt-4"
-                  name="category"
-                  id="category"
-                  onChange={formik.handleChange}
-                  disabled={view}
-                  value={formik.values.category}
-                >
-                  <option value="category">Category</option>
-                </select>
-              </div>
-            </div>
-            <div className="flex flex-row position-relative mb-4 gap-2">
-              <div className="flex flex-row position-relative">
-                <label className=" w-2/5 flex  items-center ">Mobile no</label>
-                <input
-                  type="tel"
-                  placeholder="(+94) 767 123 456"
-                  id="mobileno"
-                  name="mobileno"
-                  onChange={formik.handleChange}
-                  value={formik.values.mobileno}
-                  disabled={view}
-                  className="border-2  border-black w-3/4 rounded-lg p-2 flex  justify-items-start"
-                />
-              </div>
-
-              <div className="flex flex-row position-relative">
-                <label className=" w-1/2 flex  items-center ">Office no</label>
-                <input
-                  id="officeno"
-                  name="officeno"
-                  onChange={formik.handleChange}
-                  value={formik.values.officeno}
-                  type="tel"
-                  placeholder="(+94) 767 123 456"
-                  disabled={view}
-                  className="border-2 text-white border-black w-3/4 rounded-lg p-2"
-                />
-              </div>
-            </div>
-            <div className="flex flex-row position-relative mb-4">
-              <label className=" w-1/6 flex  items-center">Address</label>
-              <textarea
-                id="Address"
-                name="Address"
-                onChange={formik.handleChange}
-                value={formik.values.Address}
-                rows={2}
-                cols={50}
-                disabled={view}
-                placeholder="Enter Address"
-                className="border-2  text-white border-black w-3/4 rounded-lg  p-2"
-              />
-            </div>
-            <div className="flex flex-row position-relative mb-4">
-              <label className=" w-1/6 flex  items-center ">Comments</label>
-              <textarea
-                id="comment"
-                name="comment"
-                onChange={formik.handleChange}
-                value={formik.values.comment}
-                rows={2}
-                cols={50}
-                placeholder="Comments"
-                disabled={view}
-                className="border-2  text-white border-black w-3/4 rounded-lg p-2 flex  justify-items-start"
-              />
             </div>
 
             {!view && (
