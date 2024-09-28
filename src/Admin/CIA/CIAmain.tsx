@@ -90,6 +90,8 @@ const CIAmain = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [totalItems, settotalitems] = useState(0);
   const [customer, setcustomer] = useState<any[]>([]);
+  const [customere, setcustomere] = useState<any[]>([]);
+  const [project, setproject] = useState<any[]>([]);
   const [isloading, setisloading] = useState(false);
   const [selectedcustomer, setselectedcustomer] = useState({});
   const [view, setview] = useState(false);
@@ -100,12 +102,23 @@ const CIAmain = () => {
     console.log(selectedcustomer);
     setmodelopen(true);
   };
+  const resetPageToFirst = () => {
+    setCurrentPage(1);
+  };
   const fetchcustomer = async (page: number) => {
     setisloading(true);
     try {
       const response = await axios.get(
         `${API_URL}/ProjectCIA/?page=${page}&pageSize=${pageSize}`
       );
+      const response2 = await axios.get(
+        `${API_URL}/Customer/?page=${page}&pageSize=${pageSize}`
+      );
+      const response3 = await axios.get(
+        `${API_URL}/Project/?page=${page}&pageSize=${pageSize}`
+      );
+      setproject(response3.data.data);
+      setcustomere(response2.data.data);
 
       setcustomer(response.data.data);
 
@@ -143,7 +156,7 @@ const CIAmain = () => {
       {" "}
       <div className="flex flex-row position-relative gap-[930px]">
         <h1 className="text-4xl font-serif text-[#183642] p-2">CIA</h1>
-        <button
+        {/* <button
           className="text-[#183642] pt-3 rounded-lg "
           onClick={() => {
             setview(false);
@@ -155,7 +168,7 @@ const CIAmain = () => {
             size={40}
             className="text-[#183642] bg-white bg-opacity-50 rounded-lg m-2"
           />
-        </button>
+        </button> */}
       </div>
       <table className="text-[#183642]  font-serif  text-lg border-collapse border border-[#183642] bg-white bg-opacity-50 rounded-lg mb-10">
         <thead className="font-extrabold bg-white bg-opacity-35 rounded-lg">
@@ -293,6 +306,10 @@ const CIAmain = () => {
           isclose={handleCloseModal}
           selectedCustomer={selectedcustomer}
           view={view}
+          resetPageToFirst={resetPageToFirst}
+          fetchproject={() => fetchcustomer}
+          customer={customere}
+          project={project}
         />
       )}
       {ismodelconfirmopen && (
