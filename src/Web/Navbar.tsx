@@ -1,4 +1,4 @@
-import React from "react";
+
 import pic01 from "../assets/Screenshot 2025-02-09 220935.png";
 
 const Navbar = () => {

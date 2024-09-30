@@ -1,4 +1,4 @@
-import React from "react";
+
 import pico1 from "../assets/solar5.jpg";
 
 const Dashboard = () => {

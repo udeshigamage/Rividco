@@ -5,56 +5,20 @@ import { IoIosAdd } from "react-icons/io";
 
 import DeleteConfirmationmodal from "../../Utils/DeleteConfirmationmodal";
 import axios from "axios";
-import { GrCaretNext, GrCaretPrevious } from "react-icons/gr";
+
 import {
   TbPlayerTrackNextFilled,
   TbPlayerTrackPrevFilled,
 } from "react-icons/tb";
 import { toast } from "react-toastify";
-import AddProject from "./Addprojectcia";
+
 import AddProjectcia from "./Addprojectcia";
 const API_URL = import.meta.env.VITE_API_URL;
 type Props = {
   project: any;
 };
 const Projectciamain: React.FC<Props> = ({ project }) => {
-  const data = [
-    {
-      id: "2",
-      customer: "Alice",
-      location: "Kandy",
-      status: "completed",
-      coordinator: "James",
-    },
-    {
-      id: "3",
-      customer: "Michael",
-      location: "Galle",
-      status: "in progress",
-      coordinator: "Sarah",
-    },
-    {
-      id: "4",
-      customer: "Sophia",
-      location: "Jaffna",
-      status: "pending",
-      coordinator: "Robert",
-    },
-    {
-      id: "5",
-      customer: "David",
-      location: "Negombo",
-      status: "cancelled",
-      coordinator: "Emily",
-    },
-    {
-      id: "6",
-      customer: "Emma",
-      location: "Batticaloa",
-      status: "completed",
-      coordinator: "Daniel",
-    },
-  ];
+ 
 
   const [ismodelopen, setmodelopen] = useState<boolean>(false);
   const [ismodelconfirmopen, setmodelconfirmopen] = useState<boolean>(false);
@@ -251,7 +215,7 @@ const Projectciamain: React.FC<Props> = ({ project }) => {
         <AddProjectcia
           isopen={ismodelopen}
           isclose={handleCloseModal}
-          selectedproject={selectedproject}
+          selectedCustomer={selectedproject}
           view={view}
           project={project}
           resetPageToFirst={resetPageToFirst}

@@ -1,7 +1,7 @@
-// src/Admin/Adminlayout.tsx
+
 import React, { ReactNode } from "react";
 import Sidenavigation from "./Sidenavigation";
-import Dashboard from "./Dashboard";
+
 
 interface AdminlayoutProps {
   children: ReactNode;

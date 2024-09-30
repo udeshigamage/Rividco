@@ -5,7 +5,7 @@ import { IoIosAdd } from "react-icons/io";
 
 import DeleteConfirmationmodal from "../../Utils/DeleteConfirmationmodal";
 import axios from "axios";
-import { GrCaretNext, GrCaretPrevious } from "react-icons/gr";
+
 import {
   TbPlayerTrackNextFilled,
   TbPlayerTrackPrevFilled,

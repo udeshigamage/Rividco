@@ -35,7 +35,10 @@ const Approutes: React.FC = () => {
                 <Route path="projects" element={<Projectmain />} />
                 <Route path="cia" element={<CIAmain />} />
                 <Route path="systemusers" element={<Systemusermain />} />
-                <Route path="projectitem" element={<Projectitemmain />} />
+                <Route
+                  path="projectitem"
+                  element={<Projectitemmain project={{}} />}
+                />
               </Routes>
             </Adminlayout>
           }

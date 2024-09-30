@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useFormik } from "formik";
-import { comment } from "postcss";
+
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
-import { IoIosAdd } from "react-icons/io";
 
 type props = {
   isopen: boolean;
@@ -21,7 +20,7 @@ const AddProjectcia: React.FC<props> = ({
   isclose,
   selectedCustomer,
   view,
-  project,
+
   fetchproject,
   resetPageToFirst,
   customer,
@@ -45,7 +44,7 @@ const AddProjectcia: React.FC<props> = ({
     onSubmit: async (values) => {
       alert(JSON.stringify(values, null, 2));
       try {
-        const response = await axios.put(
+        await axios.put(
           `${API_URL}/ProjectCIA/${selectedCustomer.task_ID}`,
           values
         );

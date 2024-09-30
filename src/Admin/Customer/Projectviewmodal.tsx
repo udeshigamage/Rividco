@@ -1,5 +1,5 @@
 import React from "react";
-import { TiWarning } from "react-icons/ti";
+
 
 type props = {
   isopen: boolean;

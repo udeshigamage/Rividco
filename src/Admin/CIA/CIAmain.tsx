@@ -1,18 +1,17 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import { FaEdit, FaEye } from "react-icons/fa";
 import { FaDeleteLeft } from "react-icons/fa6";
-import { IoIosAdd } from "react-icons/io";
-import AddCustomermodal from "./AddCIA";
+
 import DeleteConfirmationmodal from "../../Utils/DeleteConfirmationmodal";
 import axios from "axios";
-import { GrCaretNext, GrCaretPrevious } from "react-icons/gr";
+
 import {
   TbPlayerTrackNextFilled,
   TbPlayerTrackPrevFilled,
 } from "react-icons/tb";
 import { toast } from "react-toastify";
 import AddCIA from "./AddCIA";
-import { comment } from "postcss";
+
 
 const API_URL = import.meta.env.VITE_API_URL;
 const CIAmain = () => {
