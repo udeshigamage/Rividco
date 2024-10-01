@@ -15,7 +15,6 @@ export function Login() {
           backgroundPosition: "center",
         }}
       >
-        {/* <TextGenerateEffect words={"Welcome to Rividco Projects"} /> */}
         <div className="flex flex-col justify-center items-center bg-white text-[#183642] font-serif lg:min-w-[500px] lg:min-h-[300px] rounded-xl bg-opacity-55 border-x-4 border-y-4 border-orange-400 shadow-2xl">
           <h1 className="text-6xl text-[#183642] m-5  ">
             <span className="text-slate-950">L</span>o
@@ -49,6 +48,16 @@ export function Login() {
               <TbLogin2 className="text-white w-5 h-5" />
               Login
             </button>
+          </div>
+          <div className="flex flex-row justify-center items-center">
+            {" "}
+            Don't Have account ?{" "}
+            <a
+              href="/signup"
+              className="text-slate-950  font-bold bg-opacity-90 rounded-lg px-5 "
+            >
+              Signup
+            </a>
           </div>
         </div>
       </div>
