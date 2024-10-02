@@ -4,6 +4,7 @@ import pico1 from "../assets/solar4.jpg";
 import Navbar from "../Web/Navbar";
 import { TbLogin2 } from "react-icons/tb";
 import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
 const API_URL = import.meta.env.VITE_API_URL;
 export function Signup() {
   const formik = useFormik({
@@ -17,12 +18,14 @@ export function Signup() {
       confirmpassword: "",
     },
     onSubmit: async (values) => {
-      await axios.post(`${API_URL}/Systemuser`, values);
+      const response = await axios.post(`${API_URL}/Systemuser/signup`, values);
       console.log(values);
+      toast.success(response.data.message);
     },
   });
   return (
     <div className="h-screen">
+      <ToastContainer position="top-right" />
       <Navbar />
       <div
         className="flex flex-col justify-center items-center align-middle min-h-[calc(100vh-4rem)] bg-black "
@@ -126,7 +129,7 @@ export function Signup() {
               {" "}
               Already Have account ?{" "}
               <a
-                href="/signin"
+                href="/login"
                 className="text-slate-950  font-bold bg-opacity-90 rounded-lg px-5 "
               >
                 Signin
