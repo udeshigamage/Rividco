@@ -1,6 +1,6 @@
 // src/Admin/Sidenavigation.tsx
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   MdCalendarMonth,
   MdCall,
@@ -11,12 +11,17 @@ import {
 
 const Sidenavigation: React.FC = () => {
   const location = useLocation();
+  const navigate = useNavigate();
 
-  // Helper function to check if a link is active
   const isActive = (path: string): boolean => {
     return location.pathname === path;
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+
+    navigate("/login");
+  };
   return (
     <div className="w-64 h-screen bg-[#183642] text-[#183642] p-5 shadow-lg fixed top-0 left-0">
       <a href="/app">
@@ -96,15 +101,15 @@ const Sidenavigation: React.FC = () => {
           </Link>
         </li>
         <li className="mt-32">
-          <Link
-            to="/app/logout"
-            className={`block text-white text-xl font-semibold  no-underline  p-2 rounded flex flex-row position-relative gap-2 transition-colors duration-300 ${
+          <button
+            onClick={handleLogout}
+            className={`block text-white text-xl font-semibold no-underline p-2 rounded flex flex-row gap-2 transition-colors duration-300 ${
               isActive("/admin/logout") ? "bg-gray-700" : "hover:bg-red-400"
             }`}
           >
-            <MdLogout className="" size={30} />
+            <MdLogout size={30} />
             Logout
-          </Link>
+          </button>
         </li>
       </ul>
     </div>
