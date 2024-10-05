@@ -7,12 +7,13 @@ import Vendormain from "../Admin/Vendor/Vendormain";
 import Dashboard from "../Admin/Dashboard";
 import Projectmain from "../Admin/Project/Projectmain";
 import CIAmain from "../Admin/CIA/CIAmain";
-
 import Systemusermain from "../Admin/Systemuser/Systemusermain";
 import Vendoritemmain from "../Admin/Vendoritem/Vendoritemmain";
 import Projectitemmain from "../Admin/Projectitem/Projectitemmain";
 import Projectmajor from "../Admin/Project/Projectmajor";
 import { Signup } from "../Auth/Signup";
+import PrivateRoutes from "./Privateroutes";
+// Import PrivateRoute
 
 const Approutes: React.FC = () => {
   return (
@@ -24,27 +25,31 @@ const Approutes: React.FC = () => {
         <Route path="/signup" element={<Signup />} />
         <Route path="/admin/projects/main" element={<Projectmajor />} />
 
-        {/* Admin Routes */}
-        <Route
-          path="/app/*"
-          element={
-            <Adminlayout>
-              <Routes>
-                <Route path="" element={<Dashboard />} />
-                <Route path="customer" element={<Customermain />} />
-                <Route path="vendor" element={<Vendormain />} />
-                <Route path="vendoritem" element={<Vendoritemmain />} />
-                <Route path="projects" element={<Projectmain />} />
-                <Route path="cia" element={<CIAmain />} />
-                <Route path="systemusers" element={<Systemusermain />} />
-                <Route
-                  path="projectitem"
-                  element={<Projectitemmain project={{}} />}
-                />
-              </Routes>
-            </Adminlayout>
-          }
-        />
+        {/* Protected Admin Routes */}
+        <Route element={<PrivateRoutes />}>
+          {" "}
+          {/* Add PrivateRoute here */}
+          <Route
+            path="/app/*"
+            element={
+              <Adminlayout>
+                <Routes>
+                  <Route path="" element={<Dashboard />} />
+                  <Route path="customer" element={<Customermain />} />
+                  <Route path="vendor" element={<Vendormain />} />
+                  <Route path="vendoritem" element={<Vendoritemmain />} />
+                  <Route path="projects" element={<Projectmain />} />
+                  <Route path="cia" element={<CIAmain />} />
+                  <Route path="systemusers" element={<Systemusermain />} />
+                  <Route
+                    path="projectitem"
+                    element={<Projectitemmain project={{}} />}
+                  />
+                </Routes>
+              </Adminlayout>
+            }
+          />
+        </Route>
       </Routes>
     </BrowserRouter>
   );
