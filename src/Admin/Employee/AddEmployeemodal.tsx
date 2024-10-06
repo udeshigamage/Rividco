@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useFormik } from "formik";
-import * as Yup from "yup";
+
 import axios from "axios";
 import { toast } from "react-toastify";
 
@@ -15,7 +15,7 @@ type props = {
   resetPageToFirst: () => void;
 };
 
-const AddCustomermodal: React.FC<props> = ({
+const AddEmployeemodal: React.FC<props> = ({
   isopen,
   isclose,
   selectedCustomer,
@@ -39,29 +39,22 @@ const AddCustomermodal: React.FC<props> = ({
       lastName: selectedCustomer?.lastName || "",
       email: selectedCustomer?.email || "",
       address: selectedCustomer?.address || "",
-      comment: selectedCustomer?.comment || "",
-      category: selectedCustomer?.category || "",
+
       mobileno: selectedCustomer?.mobileno || "",
       officeno: selectedCustomer?.officeno || "",
     },
-    validationSchema: Yup.object({
-      email: Yup.string().email("Invalid email address").required("Required"),
-      address: Yup.string().required("Required"),
-      mobileno: Yup.string().required("Required"),
-      firstname: Yup.string().required("Required"),
-      lastname: Yup.string().required("Required"),
-    }),
+
     onSubmit: async (values, { resetForm }) => {
       try {
-        if (selectedCustomer?.customer_ID) {
+        if (selectedCustomer?.employee_ID) {
           const resonponse = await axios.put(
-            `${API_URL}/Customer/${selectedCustomer.customer_ID}`,
+            `${API_URL}/Employee/${selectedCustomer.employee_ID}`,
             values
           );
 
           toast.success("Customer updated Successfully");
         } else {
-          const resonponse = await axios.post(`${API_URL}/Customer`, values);
+          const resonponse = await axios.post(`${API_URL}/Employee`, values);
           console.log("response", resonponse);
 
           toast.success("Customer added Successfully");
@@ -100,8 +93,8 @@ const AddCustomermodal: React.FC<props> = ({
               </button>
             </div>
             <h2 className="text-2xl font-semibold self-center font-serif">
-              {view ? "View" : selectedCustomer?.customer_ID ? "Edit" : "Add"}{" "}
-              Customer
+              {view ? "View" : selectedCustomer?.employee_ID ? "Edit" : "Add"}{" "}
+              Employee
             </h2>
             <div className="flex flex-col gap-4 p-4 bg-white rounded-2xl w-[750px] h-[500px] shadow-md">
               {/* Existing Customer Form Code */}
@@ -251,4 +244,4 @@ const AddCustomermodal: React.FC<props> = ({
   );
 };
 
-export default AddCustomermodal;
+export default AddEmployeemodal;

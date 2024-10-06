@@ -13,6 +13,7 @@ import {
 import { toast } from "react-toastify";
 import AddProject from "./Addproject";
 import { useNavigate } from "react-router-dom";
+import pico2 from "../../assets/pico5.jpg";
 const API_URL = import.meta.env.VITE_API_URL;
 const Projectmain = () => {
   const [ismodelopen, setmodelopen] = useState<boolean>(false);
@@ -80,7 +81,15 @@ const Projectmain = () => {
     navigate("/admin/projects/main", { state: { item } });
   };
   return (
-    <div className="flex flex-col justify-center items-center bg-[#B4D6E4] rounded-lg  ">
+    <div
+      className="flex flex-col justify-center items-center  rounded-lg  "
+      style={{
+        backgroundImage: `url(${pico2})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+      }}
+    >
       {" "}
       <div className="flex flex-row position-relative gap-[870px]">
         <h1 className="text-4xl font-serif text-[#183642] p-2">Projects</h1>

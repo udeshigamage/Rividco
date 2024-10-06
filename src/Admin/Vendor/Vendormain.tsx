@@ -12,6 +12,7 @@ import {
 } from "react-icons/tb";
 import { toast } from "react-toastify";
 import Addvendor from "./Addvendor";
+import pico2 from "../../assets/pico5.jpg";
 
 const Vendormain = () => {
   const [ismodelopen, setmodelopen] = useState<boolean>(false);
@@ -72,7 +73,15 @@ const Vendormain = () => {
     setmodelopen(false);
   };
   return (
-    <div className="flex flex-col justify-center items-center bg-[#B4D6E4] rounded-lg  ">
+    <div
+      className="flex flex-col justify-center items-center   rounded-lg  "
+      style={{
+        backgroundImage: `url(${pico2})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+      }}
+    >
       {" "}
       <div className="flex flex-row position-relative gap-[850px]">
         <h1 className="text-4xl font-serif text-[#183642] p-2">Vendor</h1>

@@ -4,7 +4,6 @@ import { useFormik } from "formik";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 
-
 type props = {
   isopen: boolean;
   isclose: () => void;
@@ -217,11 +216,17 @@ const AddProject: React.FC<props> = ({
 
                 <div className="flex flex-col gap-1">
                   <label className="text-gray-700 font-semibold">Status</label>
-                  <select className="p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
-                    <option defaultChecked>Select Status</option>
-                    <option>Pending</option>
-                    <option>Work in progress</option>
-                    <option>Completed</option>
+                  <select
+                    className="p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    value={formik.values.status}
+                    onChange={formik.handleChange}
+                    id="status"
+                    name="status"
+                  >
+                    <option>Select Status</option>
+                    <option value={"Pending"}>Pending</option>
+                    <option value={"Work in progress"}>Work in progress</option>
+                    <option value={"Completed"}>Completed</option>
                   </select>
                 </div>
 

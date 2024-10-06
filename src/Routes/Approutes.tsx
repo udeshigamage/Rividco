@@ -13,6 +13,7 @@ import Projectitemmain from "../Admin/Projectitem/Projectitemmain";
 import Projectmajor from "../Admin/Project/Projectmajor";
 import { Signup } from "../Auth/Signup";
 import PrivateRoutes from "./Privateroutes";
+import Employeemain from "../Admin/Employee/Employeemain";
 // Import PrivateRoute
 
 const Approutes: React.FC = () => {
@@ -37,6 +38,7 @@ const Approutes: React.FC = () => {
                   <Route path="" element={<Dashboard />} />
                   <Route path="customer" element={<Customermain />} />
                   <Route path="vendor" element={<Vendormain />} />
+                  <Route path="employee" element={<Employeemain />} />
                   <Route path="vendoritem" element={<Vendoritemmain />} />
                   <Route path="projects" element={<Projectmain />} />
                   <Route path="cia" element={<CIAmain />} />

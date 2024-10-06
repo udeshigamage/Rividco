@@ -42,6 +42,17 @@ const Sidenavigation: React.FC = () => {
         </li>
         <li className="my-4">
           <Link
+            to="/app/employee"
+            className={`block text-white text-xl font-semibold  no-underline  p-2 rounded flex flex-row position-relative gap-2 transition-colors duration-300 ${
+              isActive("/admin/employee") ? "bg-gray-700" : "hover:bg-gray-700"
+            }`}
+          >
+            <MdPeopleAlt className="" size={30} />
+            Employee
+          </Link>
+        </li>
+        <li className="my-4">
+          <Link
             to="/app/vendor"
             className={`block text-white text-xl font-semibold  no-underline  p-2 rounded flex flex-row position-relative gap-2 transition-colors duration-300 ${
               isActive("/admin/vendor") ? "bg-gray-700" : "hover:bg-gray-700"
