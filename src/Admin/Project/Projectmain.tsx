@@ -24,7 +24,7 @@ const Projectmain = () => {
   const [project, setproject] = useState<any[]>([]);
   const [customer, setcustomer] = useState<any[]>([]);
   const [isloading, setisloading] = useState(false);
-  const [selectedproject, setselectedproject] = useState({});
+  const [selectedproject, setselectedproject] = useState<any>(null);
   const pageSize = 5;
   const [view, setview] = useState(false);
   const handleOpenModal = (item: any) => {
@@ -68,10 +68,26 @@ const Projectmain = () => {
   const handleconfirmCloseModal = () => {
     setmodelconfirmopen(false);
   };
-  const handleconfirmOpenModal = () => {
+  const handledelete = async () => {
+    if (selectedproject && selectedproject.project_ID) {
+      try {
+        const response = await axios.delete(
+          `${API_URL}/Project/${selectedproject.project_ID}`
+        );
+        toast.success(response.data.message);
+        fetchcustomer(currentPage); // Refetch customers after deletion
+        setmodelconfirmopen(false); // Close the confirmation modal
+      } catch (error) {
+        console.error(error);
+        toast.error("Something went wrong during deletion.");
+      }
+    }
+  };
+  const handleconfirmOpenModal = (item: any) => {
     console.log("clicked");
 
     setmodelconfirmopen(true);
+    setselectedproject(item);
   };
   const navigate = useNavigate();
   const handleCloseModal = () => {
@@ -195,7 +211,7 @@ const Projectmain = () => {
                       <button
                         className=" text-[#183642] p-1 rounded-lg m-2 "
                         onClick={() => {
-                          handleconfirmOpenModal();
+                          handleconfirmOpenModal(item);
                         }}
                       >
                         <FaDeleteLeft
@@ -249,6 +265,7 @@ const Projectmain = () => {
         <DeleteConfirmationmodal
           isopen={ismodelconfirmopen}
           isclose={handleconfirmCloseModal}
+          handledelete={handledelete}
         />
       )}
     </div>

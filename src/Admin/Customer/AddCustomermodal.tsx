@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useFormik } from "formik";
+import { ErrorMessage, useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -47,9 +47,14 @@ const AddCustomermodal: React.FC<props> = ({
     validationSchema: Yup.object({
       email: Yup.string().email("Invalid email address").required("Required"),
       address: Yup.string().required("Required"),
-      mobileno: Yup.string().required("Required"),
-      firstname: Yup.string().required("Required"),
-      lastname: Yup.string().required("Required"),
+      mobileno: Yup.string()
+        .required("Required")
+        .matches(/^(?:\+94|0)7[0-9]{8}$/, "Invalid mobile number"),
+      officeno: Yup.string()
+        .required("Required")
+        .matches(/^(?:\+94|0)7[0-9]{8}$/, "Invalid office number"),
+      firstName: Yup.string().required("Required"),
+      lastName: Yup.string().required("Required"),
     }),
     onSubmit: async (values, { resetForm }) => {
       try {
@@ -79,7 +84,7 @@ const AddCustomermodal: React.FC<props> = ({
     <div>
       <div className="fixed inset-0 flex justify-center items-center bg-[#183642] bg-opacity-50">
         <form onSubmit={formik.handleSubmit}>
-          <div className="bg-[#183642] bg-opacity-95 p-5 rounded-lg shadow-lg w-[800px] h-[650px] m-1 flex flex-col text-white ">
+          <div className="bg-[#183642] bg-opacity-95 p-5 rounded-lg shadow-lg w-[800px] h-[720px] m-1 flex flex-col text-white ">
             <div className="flex flex-col ">
               <button
                 onClick={isclose}
@@ -103,7 +108,7 @@ const AddCustomermodal: React.FC<props> = ({
               {view ? "View" : selectedCustomer?.customer_ID ? "Edit" : "Add"}{" "}
               Customer
             </h2>
-            <div className="flex flex-col gap-4 p-4 bg-white rounded-2xl w-[750px] h-[500px] shadow-md">
+            <div className="flex flex-col gap-4 p-4 bg-white rounded-2xl w-[750px] h-[600px] shadow-md">
               {/* Existing Customer Form Code */}
 
               <div className="flex flex-col gap-4 mt-6">
@@ -118,10 +123,18 @@ const AddCustomermodal: React.FC<props> = ({
                       type="text"
                       placeholder="First Name"
                       onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
                       value={formik.values.firstName}
                       disabled={view}
                       className="border-2 text-white bg-black border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-400"
                     />
+                    {formik.errors.firstName &&
+                      formik.touched.firstName &&
+                      typeof formik.errors.firstName === "string" && (
+                        <span role="alert" className="text-red-500 text-sm">
+                          {formik.errors.firstName}
+                        </span>
+                      )}
                   </div>
 
                   <div className="flex flex-col gap-1 w-1/2">
@@ -135,9 +148,17 @@ const AddCustomermodal: React.FC<props> = ({
                       placeholder="Last Name"
                       onChange={formik.handleChange}
                       value={formik.values.lastName}
+                      onBlur={formik.handleBlur}
                       disabled={view}
                       className="border-2 border-gray-300 text-white bg-black rounded-lg p-2 focus:ring-2 focus:ring-blue-400"
                     />
+                    {formik.errors.lastName &&
+                      formik.touched.lastName &&
+                      typeof formik.errors.lastName === "string" && (
+                        <span role="alert" className="text-red-500 text-sm">
+                          {formik.errors.lastName}
+                        </span>
+                      )}
                   </div>
                 </div>
 
@@ -151,9 +172,17 @@ const AddCustomermodal: React.FC<props> = ({
                       placeholder="Email"
                       onChange={formik.handleChange}
                       value={formik.values.email}
+                      onBlur={formik.handleBlur}
                       disabled={view}
                       className="border-2 border-gray-300 text-white bg-black rounded-lg p-2 focus:ring-2 focus:ring-blue-400"
                     />
+                    {formik.errors.email &&
+                      formik.touched.email &&
+                      typeof formik.errors.email === "string" && (
+                        <span role="alert" className="text-red-500 text-sm">
+                          {formik.errors.email}
+                        </span>
+                      )}
                   </div>
                 </div>
 
@@ -169,9 +198,17 @@ const AddCustomermodal: React.FC<props> = ({
                       placeholder="(+94) 767 123 456"
                       onChange={formik.handleChange}
                       value={formik.values.mobileno}
+                      onBlur={formik.handleBlur}
                       disabled={view}
                       className="border-2 border-gray-300 rounded-lg p-2 text-white bg-black focus:ring-2 focus:ring-blue-400"
                     />
+                    {formik.errors.mobileno &&
+                      formik.touched.mobileno &&
+                      typeof formik.errors.mobileno === "string" && (
+                        <span role="alert" className="text-red-500 text-sm">
+                          {formik.errors.mobileno}
+                        </span>
+                      )}
                   </div>
 
                   <div className="flex flex-col gap-1 w-1/2">
@@ -185,9 +222,17 @@ const AddCustomermodal: React.FC<props> = ({
                       placeholder="(+94) 767 123 456"
                       onChange={formik.handleChange}
                       value={formik.values.officeno}
+                      onBlur={formik.handleBlur}
                       disabled={view}
                       className="border-2 border-gray-300 text-white bg-black rounded-lg p-2 focus:ring-2 focus:ring-blue-400"
                     />
+                    {formik.errors.officeno &&
+                      formik.touched.officeno &&
+                      typeof formik.errors.officeno === "string" && (
+                        <span role="alert" className="text-red-500 text-sm">
+                          {formik.errors.officeno}
+                        </span>
+                      )}
                   </div>
                 </div>
 
@@ -201,9 +246,17 @@ const AddCustomermodal: React.FC<props> = ({
                     placeholder="Enter Address"
                     onChange={formik.handleChange}
                     value={formik.values.address}
+                    onBlur={formik.handleBlur}
                     disabled={view}
                     className="border-2 border-gray-300 text-white bg-black rounded-lg p-2 focus:ring-2 focus:ring-blue-400"
                   />
+                  {formik.errors.address &&
+                    formik.touched.address &&
+                    typeof formik.errors.address === "string" && (
+                      <span role="alert" className="text-red-500 text-sm">
+                        {formik.errors.address}
+                      </span>
+                    )}
                 </div>
               </div>
             </div>

@@ -22,7 +22,7 @@ const Employeemain = () => {
   const [totalItems, settotalitems] = useState(0);
   const [customer, setcustomer] = useState<any[]>([]);
   const [isloading, setisloading] = useState(false);
-  const [selectedcustomer, setselectedcustomer] = useState({});
+  const [selectedcustomer, setselectedcustomer] = useState<any>(null);
   const [deletecustomer, setdeletecustomer] = useState(false);
   const pageSize = 9;
   const [view, setview] = useState(false);
@@ -63,12 +63,27 @@ const Employeemain = () => {
   const handleconfirmCloseModal = () => {
     setmodelconfirmopen(false);
   };
-  const handleconfirmOpenModal = () => {
+  const handleconfirmOpenModal = (item: any) => {
     console.log("clicked");
 
     setmodelconfirmopen(true);
+    setselectedcustomer(item);
   };
-
+  const handledelete = async () => {
+    if (selectedcustomer && selectedcustomer.employee_ID) {
+      try {
+        const response = await axios.delete(
+          `${API_URL}/Employee/${selectedcustomer.employee_ID}`
+        );
+        toast.success(response.data.message);
+        fetchcustomer(currentPage); // Refetch customers after deletion
+        setmodelconfirmopen(false); // Close the confirmation modal
+      } catch (error) {
+        console.error(error);
+        toast.error("Something went wrong during deletion.");
+      }
+    }
+  };
   const handleCloseModal = () => {
     setmodelopen(false);
   };
@@ -162,7 +177,7 @@ const Employeemain = () => {
                       <button
                         className=" text-[#183642] p-1 rounded-lg m-2 "
                         onClick={() => {
-                          handleconfirmOpenModal();
+                          handleconfirmOpenModal(item);
                         }}
                       >
                         <FaDeleteLeft className="pt-1" />
@@ -210,6 +225,7 @@ const Employeemain = () => {
         <DeleteConfirmationmodal
           isopen={ismodelconfirmopen}
           isclose={handleconfirmCloseModal}
+          handledelete={handledelete}
         />
       )}
     </div>
