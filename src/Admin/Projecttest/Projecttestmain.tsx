@@ -18,7 +18,6 @@ type Props = {
   project: any;
 };
 const Projecttestmain: React.FC<Props> = ({ project }) => {
- 
   const [ismodelopen, setmodelopen] = useState<boolean>(false);
   const [ismodelconfirmopen, setmodelconfirmopen] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -26,7 +25,7 @@ const Projecttestmain: React.FC<Props> = ({ project }) => {
   const [totalItems, settotalitems] = useState(0);
   const [projecte, setprojecte] = useState<any[]>([]);
   const [isloading, setisloading] = useState(false);
-  const [selectedproject, setselectedproject] = useState({});
+  const [selectedproject, setselectedproject] = useState<any>(null);
   const pageSize = 5;
   const [view, setview] = useState(false);
   const handleOpenModal = (item: any) => {
@@ -57,6 +56,21 @@ const Projecttestmain: React.FC<Props> = ({ project }) => {
       setCurrentPage(page);
     }
   };
+  const handledelete = async () => {
+    if (selectedproject && selectedproject.projectTest_ID) {
+      try {
+        const response = await axios.delete(
+          `${API_URL}/Projecttest/${selectedproject.projectTest_ID}`
+        );
+        toast.success(response.data.message);
+        fetchcustomer(currentPage); // Refetch customers after deletion
+        setmodelconfirmopen(false); // Close the confirmation modal
+      } catch (error) {
+        console.error(error);
+        toast.error("Something went wrong during deletion.");
+      }
+    }
+  };
   useEffect(() => {
     fetchcustomer(currentPage);
   }, [currentPage]);
@@ -66,10 +80,9 @@ const Projecttestmain: React.FC<Props> = ({ project }) => {
   const handleconfirmCloseModal = () => {
     setmodelconfirmopen(false);
   };
-  const handleconfirmOpenModal = () => {
-    console.log("clicked");
-
+  const handleconfirmOpenModal = (item: any) => {
     setmodelconfirmopen(true);
+    setselectedproject(item);
   };
 
   const handleCloseModal = () => {
@@ -171,7 +184,7 @@ const Projecttestmain: React.FC<Props> = ({ project }) => {
                       <button
                         className=" text-[#183642] p-1 rounded-lg m-2 "
                         onClick={() => {
-                          handleconfirmOpenModal();
+                          handleconfirmOpenModal(item);
                         }}
                       >
                         <FaDeleteLeft className="pt-1" />
@@ -220,6 +233,7 @@ const Projecttestmain: React.FC<Props> = ({ project }) => {
         <DeleteConfirmationmodal
           isopen={ismodelconfirmopen}
           isclose={handleconfirmCloseModal}
+          handledelete={handledelete}
         />
       )}
     </div>

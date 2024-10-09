@@ -26,7 +26,7 @@ const Projectitemmain: React.FC<Props> = ({ project }) => {
   const [projecte, setprojecte] = useState<any[]>([]);
   const [vendor, setvendors] = useState<any[]>([]);
   const [isloading, setisloading] = useState(false);
-  const [selectedproject, setselectedproject] = useState({});
+  const [selectedproject, setselectedproject] = useState<any>(null);
   const pageSize = 5;
   const [view, setview] = useState(false);
   const handleOpenModal = (item: any) => {
@@ -66,16 +66,32 @@ const Projectitemmain: React.FC<Props> = ({ project }) => {
   const handleconfirmCloseModal = () => {
     setmodelconfirmopen(false);
   };
-  const handleconfirmOpenModal = () => {
+  const handleconfirmOpenModal = (item: any) => {
     console.log("clicked");
 
     setmodelconfirmopen(true);
+    setselectedproject(item);
   };
   const resetPageToFirst = () => {
     setCurrentPage(1);
   };
   const handleCloseModal = () => {
     setmodelopen(false);
+  };
+  const handledelete = async () => {
+    if (selectedproject && selectedproject.projectitem_ID) {
+      try {
+        const response = await axios.delete(
+          `${API_URL}/Projectitem/${selectedproject.projectitem_ID}`
+        );
+        toast.success(response.data.message);
+        fetchcustomer(currentPage); // Refetch customers after deletion
+        setmodelconfirmopen(false); // Close the confirmation modal
+      } catch (error) {
+        console.error(error);
+        toast.error("Something went wrong during deletion.");
+      }
+    }
   };
   return (
     <div className="flex flex-col justify-center items-center bg-[#B4D6E4] rounded-lg  ">
@@ -173,7 +189,7 @@ const Projectitemmain: React.FC<Props> = ({ project }) => {
                       <button
                         className=" text-[#183642] p-1 rounded-lg m-2 "
                         onClick={() => {
-                          handleconfirmOpenModal();
+                          handleconfirmOpenModal(item);
                         }}
                       >
                         <FaDeleteLeft className="pt-1" />
@@ -223,6 +239,7 @@ const Projectitemmain: React.FC<Props> = ({ project }) => {
         <DeleteConfirmationmodal
           isopen={ismodelconfirmopen}
           isclose={handleconfirmCloseModal}
+          handledelete={handledelete}
         />
       )}
     </div>
