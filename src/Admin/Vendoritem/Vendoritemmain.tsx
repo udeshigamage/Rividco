@@ -22,7 +22,7 @@ const Vendoritemmain = () => {
   const [vendor, setvendor] = useState<any[]>([]);
   const [item, setitem] = useState<any[]>([]);
   const [isloading, setisloading] = useState(false);
-  const [selecteditem, setselecteditem] = useState({});
+  const [selecteditem, setselecteditem] = useState<any>(null);
   const pageSize = 5;
   const [view, setview] = useState(false);
   const handleOpenModal = (item: any) => {
@@ -57,6 +57,21 @@ const Vendoritemmain = () => {
       setCurrentPage(page);
     }
   };
+  const handledelete = async () => {
+    if (selecteditem && selecteditem.vendoritem_ID) {
+      try {
+        const response = await axios.delete(
+          `${API_URL}/Vendoritem/${selecteditem.vendoritem_ID}`
+        );
+        toast.success(response.data.message);
+        fetchitem(currentPage); // Refetch customers after deletion
+        setmodelconfirmopen(false); // Close the confirmation modal
+      } catch (error) {
+        console.error(error);
+        toast.error("Something went wrong during deletion.");
+      }
+    }
+  };
 
   const resetPageToFirst = () => {
     setCurrentPage(1);
@@ -67,10 +82,11 @@ const Vendoritemmain = () => {
   const handleconfirmCloseModal = () => {
     setmodelconfirmopen(false);
   };
-  const handleconfirmOpenModal = () => {
+  const handleconfirmOpenModal = (item: any) => {
     console.log("clicked");
 
     setmodelconfirmopen(true);
+    setselecteditem(item);
   };
 
   const handleCloseModal = () => {
@@ -176,7 +192,7 @@ const Vendoritemmain = () => {
                       <button
                         className=" text-[#183642] p-1 rounded-lg m-2 "
                         onClick={() => {
-                          handleconfirmOpenModal();
+                          handleconfirmOpenModal(item);
                         }}
                       >
                         <FaDeleteLeft className="pt-1" />
@@ -225,6 +241,7 @@ const Vendoritemmain = () => {
         <DeleteConfirmationmodal
           isopen={ismodelconfirmopen}
           isclose={handleconfirmCloseModal}
+          handledelete={handledelete}
         />
       )}
     </div>

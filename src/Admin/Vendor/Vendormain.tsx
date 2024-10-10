@@ -22,7 +22,7 @@ const Vendormain = () => {
   const [totalItems, settotalitems] = useState(0);
   const [customer, setcustomer] = useState<any[]>([]);
   const [isloading, setisloading] = useState(false);
-  const [selectedcustomer, setselectedcustomer] = useState({});
+  const [selectedcustomer, setselectedcustomer] = useState<any>(null);
   const pageSize = 5;
   const [view, setview] = useState(false);
   const handleOpenModal = (item: any) => {
@@ -54,6 +54,21 @@ const Vendormain = () => {
       setCurrentPage(page);
     }
   };
+  const handledelete = async () => {
+    if (selectedcustomer && selectedcustomer.vendor_ID) {
+      try {
+        const response = await axios.delete(
+          `${API_URL}/Vendor/${selectedcustomer.vendor_ID}`
+        );
+        toast.success(response.data.message);
+        fetchcustomer(currentPage); // Refetch customers after deletion
+        setmodelconfirmopen(false); // Close the confirmation modal
+      } catch (error) {
+        console.error(error);
+        toast.error("Something went wrong during deletion.");
+      }
+    }
+  };
   useEffect(() => {
     fetchcustomer(currentPage);
   }, [currentPage]);
@@ -63,10 +78,11 @@ const Vendormain = () => {
   const resetPageToFirst = () => {
     setCurrentPage(1);
   };
-  const handleconfirmOpenModal = () => {
+  const handleconfirmOpenModal = (item: any) => {
     console.log("clicked");
 
     setmodelconfirmopen(true);
+    setselectedcustomer(item);
   };
 
   const handleCloseModal = () => {
@@ -170,7 +186,7 @@ const Vendormain = () => {
                       <button
                         className=" text-[#183642] p-1 rounded-lg m-2 "
                         onClick={() => {
-                          handleconfirmOpenModal();
+                          handleconfirmOpenModal(item);
                         }}
                       >
                         <FaDeleteLeft className="pt-1" />
@@ -218,6 +234,7 @@ const Vendormain = () => {
         <DeleteConfirmationmodal
           isopen={ismodelconfirmopen}
           isclose={handleconfirmCloseModal}
+          handledelete={handledelete}
         />
       )}
     </div>
