@@ -4,9 +4,16 @@ import { TiWarning } from "react-icons/ti";
 type props = {
   isopen: boolean;
   isclose: () => void;
+
+  handledelete: () => {};
 };
-const DeleteConfirmationmodal: React.FC<props> = ({ isopen, isclose }) => {
+const DeleteConfirmationmodal: React.FC<props> = ({
+  isopen,
+  isclose,
+  handledelete,
+}) => {
   if (!isopen) return null;
+
   return (
     <div>
       <div className="fixed inset-0 flex justify-center items-center  ">
@@ -31,7 +38,12 @@ const DeleteConfirmationmodal: React.FC<props> = ({ isopen, isclose }) => {
             Are you sure you want to delete?
           </h1>
           <div className="flex flex-row justify-center items-center">
-            <button className="text-white bg-slate-900 p-2 rounded-lg m-2 text-lg font-serif">
+            <button
+              className="text-white bg-slate-900 p-2 rounded-lg m-2 text-lg font-serif"
+              onClick={() => {
+                handledelete();
+              }}
+            >
               Yes
             </button>
             <button
