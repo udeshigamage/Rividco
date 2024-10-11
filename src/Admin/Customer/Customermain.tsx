@@ -225,7 +225,7 @@ const Customermain = () => {
         <DeleteConfirmationmodal
           isopen={ismodelconfirmopen}
           isclose={handleconfirmCloseModal}
-          handledelete={() => handledelete}
+          handledelete={handledelete}
         />
       )}
     </div>
