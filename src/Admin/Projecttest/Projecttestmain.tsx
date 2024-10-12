@@ -23,6 +23,7 @@ const Projecttestmain: React.FC<Props> = ({ project }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [totalItems, settotalitems] = useState(0);
+  const [employee, setemployee] = useState<any[]>([]);
   const [projecte, setprojecte] = useState<any[]>([]);
   const [isloading, setisloading] = useState(false);
   const [selectedproject, setselectedproject] = useState<any>(null);
@@ -40,7 +41,10 @@ const Projecttestmain: React.FC<Props> = ({ project }) => {
       const response = await axios.get(
         `${API_URL}/Projecttest/project-test/${project.project_ID}?page=${page}&pageSize=${pageSize}`
       );
-
+      const response3 = await axios.get(
+        `${API_URL}/Employee?page=${page}&pageSize=${pageSize}`
+      );
+      setemployee(response3.data.data);
       setprojecte(response.data.data);
       setTotalPages(response.data.totalPages);
       settotalitems(response.data.totalItems);
@@ -227,6 +231,7 @@ const Projecttestmain: React.FC<Props> = ({ project }) => {
           resetPageToFirst={resetPageToFirst}
           fetchproject={() => fetchcustomer}
           project={project}
+          employee={employee}
         />
       )}
       {ismodelconfirmopen && (

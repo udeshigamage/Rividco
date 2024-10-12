@@ -23,6 +23,7 @@ const Projectmain = () => {
   const [totalItems, settotalitems] = useState(0);
   const [project, setproject] = useState<any[]>([]);
   const [customer, setcustomer] = useState<any[]>([]);
+  const [employee, setemployee] = useState<any[]>([]);
   const [isloading, setisloading] = useState(false);
   const [selectedproject, setselectedproject] = useState<any>(null);
   const pageSize = 5;
@@ -42,7 +43,11 @@ const Projectmain = () => {
       const response2 = await axios.get(
         `${API_URL}/Customer?page=${page}&pageSize=${pageSize}`
       );
+      const response3 = await axios.get(
+        `${API_URL}/Employee?page=${page}&pageSize=${pageSize}`
+      );
       setcustomer(response2.data.data);
+      setemployee(response3.data.data);
 
       setproject(response.data.data);
       setTotalPages(response.data.totalPages);
@@ -163,13 +168,13 @@ const Projectmain = () => {
                 key={index}
                 className="border-collapse border font-semibold font-mono border-[#183642] border-x-1 border-y-1 text-center align-middle "
               >
-                <tr
-                  className="border-collapse border border-[#183642] border-x-1 border-y-1 hover:bg-[#183642] hover:text-white "
-                  onClick={() => {
-                    handleclick(item);
-                  }}
-                >
-                  <td className="border-collapse border border-[#183642] border-x-1 border-y-1 ">
+                <tr className="border-collapse border border-[#183642] border-x-1 border-y-1 hover:bg-[#183642] hover:text-white ">
+                  <td
+                    className="border-collapse border border-[#183642] border-x-1 border-y-1 "
+                    onClick={() => {
+                      handleclick(item);
+                    }}
+                  >
                     {item.project_ID}
                   </td>
                   <td className="border-collapse border border-[#183642] border-x-1 border-y-1">
@@ -259,6 +264,7 @@ const Projectmain = () => {
           }}
           resetPageToFirst={resetPageToFirst}
           customer={customer}
+          employee={employee}
         />
       )}
       {ismodelconfirmopen && (

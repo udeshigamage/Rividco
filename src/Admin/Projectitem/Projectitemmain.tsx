@@ -163,9 +163,9 @@ const Projectitemmain: React.FC<Props> = ({ project }) => {
                     {item.warranty_duration}{" "}
                   </td>
                   <td className="border-collapse border border-[#183642] border-x-1 border-y-1">
-                    {item.added_Date}
+                    {new Date(item.added_Date).toLocaleDateString()}
                   </td>
-                  <td>{item.added_Date}</td>
+                  <td> {item.vendoritem?.item_name || "N/A"}</td>
                   <td className="border-collapse border border-[#183642] border-x-1 border-y-1 text-start m-2 ">
                     <div className="flex flex-row position-relative flex flex-row justify-center items-center">
                       <button

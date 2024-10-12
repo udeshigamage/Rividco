@@ -13,6 +13,7 @@ type props = {
   fetchproject: () => void;
   resetPageToFirst: () => void;
   customer: any;
+  employee: any;
 };
 const API_URL = import.meta.env.VITE_API_URL;
 const AddProjectcia: React.FC<props> = ({
@@ -24,38 +25,46 @@ const AddProjectcia: React.FC<props> = ({
   fetchproject,
   resetPageToFirst,
   customer,
+  project,
+  employee,
 }) => {
   if (!isopen) return null;
 
   const formik = useFormik({
     initialValues: {
-      project_ID: selectedCustomer?.project_ID || "",
+      project_ID: project.project_ID,
       requestedby: selectedCustomer?.requestedby || "",
       urgencylevel: selectedCustomer?.urgencylevel || "",
       category: selectedCustomer?.category || "",
-      addeddate: selectedCustomer?.addeddate || "",
+
       assignedto: selectedCustomer?.assignedto || "",
       status: selectedCustomer?.status || "",
       addedby: selectedCustomer?.addedby || "",
       comment: selectedCustomer?.comment || "",
+      addedDate: selectedCustomer?.addedDate || "",
       callbackno: selectedCustomer?.callbackno || "",
-      description: selectedCustomer?.description || "",
     },
     onSubmit: async (values) => {
-      alert(JSON.stringify(values, null, 2));
+      // alert(JSON.stringify(values, null, 2));
       try {
-        await axios.put(
-          `${API_URL}/ProjectCIA/${selectedCustomer.task_ID}`,
-          values
-        );
+        if (selectedCustomer?.task_ID) {
+          const resonponse = await axios.put(
+            `${API_URL}/ProjectCIA/${selectedCustomer.task_ID}`,
+            values
+          );
+          console.log("response", resonponse);
+          toast.success("Task updated Successfully");
+        } else {
+          const response = await axios.post(`${API_URL}/ProjectCIA`, values);
 
-        toast.success("CIA updated Successfully");
+          toast.success("Task added Successfully");
+        }
         fetchproject();
         resetPageToFirst();
         isclose();
       } catch (error) {
         console.log(error);
-        toast.success("CIA Added Successfully");
+        toast.error("error");
       }
     },
   });
@@ -87,7 +96,7 @@ const AddProjectcia: React.FC<props> = ({
             </div>
             <h2 className="text-2xl font-semibold self-center font-serif">
               {view ? "View" : selectedCustomer?.task_ID ? "Edit" : "Add"}{" "}
-              Project item
+              Project CIA
             </h2>
             <div className="flex flex-row position-relative my-4 gap-5">
               <div className="basis-1/2 flex flex-col gap-4">
@@ -163,8 +172,8 @@ const AddProjectcia: React.FC<props> = ({
                     disabled={view}
                   >
                     <option value="">Select a Assigned to</option>
-                    {customer.map((item: any) => (
-                      <option key={item.customer_ID} value={item.customer_ID}>
+                    {employee.map((item: any) => (
+                      <option key={item.employee_ID} value={item.employee_ID}>
                         {item.firstName}
                       </option>
                     ))}
@@ -234,8 +243,8 @@ const AddProjectcia: React.FC<props> = ({
                   </label>
                   <input
                     type="date"
-                    name="addeddate"
-                    value={formik.values.addeddate}
+                    name="addedDate"
+                    value={formik.values.addedDate}
                     onChange={formik.handleChange}
                     disabled={view}
                     className="w-full p-2 border border-gray-300 rounded-md"
@@ -249,19 +258,6 @@ const AddProjectcia: React.FC<props> = ({
                     type="tel"
                     name="callbackno"
                     value={formik.values.callbackno}
-                    onChange={formik.handleChange}
-                    disabled={view}
-                    className="w-full p-2 border border-gray-300 rounded-md"
-                  />
-                </div>
-                <div className="flex flex-col gap-1">
-                  <label className="text-gray-700 font-semibold">
-                    Description
-                  </label>
-                  <input
-                    type="text"
-                    name="description"
-                    value={formik.values.description}
                     onChange={formik.handleChange}
                     disabled={view}
                     className="w-full p-2 border border-gray-300 rounded-md"

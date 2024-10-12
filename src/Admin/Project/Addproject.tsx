@@ -12,6 +12,7 @@ type props = {
   fetchproject: () => void;
   resetPageToFirst: () => void;
   customer: any;
+  employee: any;
 };
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -23,15 +24,17 @@ const AddProject: React.FC<props> = ({
   fetchproject,
   resetPageToFirst,
   customer,
+  employee,
 }) => {
   if (!isopen) return null;
 
   const formik = useFormik({
     initialValues: {
-      customer: selectedproject?.customer_ID || "",
-      Address: selectedproject?.Address || "",
+      customer_ID: selectedproject?.customer_ID || "",
+
+      address: selectedproject?.address || "",
       location: selectedproject?.location || "",
-      Coordinator_ID: selectedproject?.coordinator || "",
+      coordinator_ID: selectedproject?.coordinator_ID || "",
       startdate: selectedproject?.startdate || "",
       warranty_period: selectedproject?.warranty_period || "",
       status: selectedproject?.status || "",
@@ -98,8 +101,9 @@ const AddProject: React.FC<props> = ({
                     Customer
                   </label>
                   <select
-                    name="customer"
-                    value={formik.values.customer}
+                    name="customer_ID"
+                    id="customer_ID"
+                    value={formik.values.customer_ID}
                     onChange={formik.handleChange}
                     className="w-full p-2 border border-gray-300 rounded-md"
                     required
@@ -115,16 +119,14 @@ const AddProject: React.FC<props> = ({
                 </div>
 
                 <div className="flex flex-col gap-1">
-                  <label className="text-gray-700 font-semibold">
-                    Description
-                  </label>
+                  <label className="text-gray-700 font-semibold">Address</label>
                   <textarea
                     cols={50}
                     rows={2}
-                    id="Address"
-                    name="Address"
+                    id="address"
+                    name="address"
                     onChange={formik.handleChange}
-                    value={formik.values.Address}
+                    value={formik.values.address}
                     disabled={view}
                     className="p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
                   />
@@ -150,16 +152,17 @@ const AddProject: React.FC<props> = ({
                     Coordinator
                   </label>
                   <select
-                    name="Coordinator_ID"
-                    value={formik.values.Coordinator_ID}
+                    id="coordinator_ID"
+                    name="coordinator_ID"
+                    value={formik.values.coordinator_ID}
                     onChange={formik.handleChange}
                     className="w-full p-2 border border-gray-300 rounded-md"
                     required
                     disabled={view}
                   >
                     <option value="">Select a coordinator</option>
-                    {customer.map((item: any) => (
-                      <option key={item.customer_ID} value={item.customer_ID}>
+                    {employee.map((item: any) => (
+                      <option key={item.employee_ID} value={item.employee_ID}>
                         {item.firstName}
                       </option>
                     ))}

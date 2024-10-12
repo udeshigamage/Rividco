@@ -1,11 +1,12 @@
-import  { useState } from "react";
+import { use, useState } from "react";
 import Projectitemmain from "../Projectitem/Projectitemmain";
 import Projecttestmain from "../Projecttest/Projecttestmain";
 
 import Projectciamain from "../ProjectCIA/Projectciamain";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Projectmajor = () => {
+  const navigate = useNavigate();
   const [selectedTable, setSelectedTable] = useState("Project Item");
   const location = useLocation();
   const { item } = location.state || {};
@@ -27,10 +28,18 @@ const Projectmajor = () => {
   return (
     <div className="bg-[#B4D6E4] h-screen">
       <div className="flex flex-row justify-evenly gap-2 ">
+        <div className="flex flex-row gap-2">
+          <button
+            className="bg-slate-900 text-white p-5 rounded-lg w-[100px] m-2"
+            onClick={() => navigate(-1)}
+          >
+            {"<-"} Back
+          </button>
+        </div>
         {["Project Item", "Tests", "CIA"].map((item) => (
           <button
             key={item}
-            className={`bg-white text-[#183642] p-5 rounded-lg w-1/3 m-2 ${
+            className={`bg-slate-900 text-white p-5 rounded-lg w-1/3 m-2 ${
               selectedTable === item ? "bg-[#8C41DC] text-black" : ""
             }`}
             onClick={() => setSelectedTable(item)}

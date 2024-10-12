@@ -30,10 +30,10 @@ const Addvendoritem: React.FC<Props> = ({
     initialValues: {
       item_name: selecteditem?.item_name || "",
       vendor_ID: selecteditem?.vendor_ID || "", // Corrected from vendor_ID
-      price: selecteditem?.Price || 0,
-      warranty_duration: selecteditem?.Warranty_duration || "",
+      price: selecteditem?.price || "",
+      warranty_duration: selecteditem?.warranty_duration || "",
       capacity: selecteditem?.capacity || "",
-      comment: selecteditem?.comments || "",
+      comment: selecteditem?.comment || "",
       brand: selecteditem?.brand || "", // New field
       product_code: selecteditem?.product_code || "", // New field
     },
@@ -223,7 +223,7 @@ const Addvendoritem: React.FC<Props> = ({
                     onChange={formik.handleChange}
                     value={formik.values.comment}
                     disabled={view}
-                    className="border-2 border-gray-300 bg-white rounded-lg p-2 focus:ring-2 focus:ring-blue-400"
+                    className="border-2 border-gray-300  rounded-lg p-2 focus:ring-2 focus:ring-blue-400"
                   />
                 </div>
               </div>
