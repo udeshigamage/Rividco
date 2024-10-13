@@ -1,4 +1,4 @@
-
+import { ToastContainer } from "react-toastify";
 import Approutes from "./Routes/Approutes";
 
 function App() {
@@ -6,6 +6,7 @@ function App() {
     <>
       <div>
         <Approutes />
+        <ToastContainer position="top-right" />
       </div>
     </>
   );

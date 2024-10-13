@@ -1,4 +1,4 @@
-import  { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { FaEdit, FaEye } from "react-icons/fa";
 import { FaDeleteLeft } from "react-icons/fa6";
 
@@ -11,77 +11,29 @@ import {
 } from "react-icons/tb";
 import { toast } from "react-toastify";
 import AddCIA from "./AddCIA";
-
+import CommonLoading from "../../Utils/Commonloading";
 
 const API_URL = import.meta.env.VITE_API_URL;
 const CIAmain = () => {
-  const customers = [
-    {
-      Taskid: 1,
-      Category: "Installation",
-      Requestedby: "Anderson Solar Solutions",
-      Addedby: "liamanderson",
-      Addeddate: "2025-02-12",
-      Status: "Pending",
-      Assignedto: "Residential Client",
-      Callbackno: "+94760123456",
-      comment: "nothing to say",
-      projectregarding: "solar",
-      Description: "desc",
-    },
-    {
-      Taskid: 2,
-      Category: "Maintenance",
-      Requestedby: "GreenTech Solar",
-      Addedby: "sarahgreen",
-      Addeddate: "2025-02-10",
-      Status: "In Progress",
-      Assignedto: "Commercial Client",
-      Callbackno: "+94760123457",
-      comment: "nothing to say",
-      projectregarding: "solar",
-      Description: "desc",
-    },
-    {
-      Taskid: 3,
-      Category: "Repair",
-      Requestedby: "SunPower Systems",
-      Addedby: "markjohnson",
-      Addeddate: "2025-02-11",
-      Status: "Completed",
-      Assignedto: "Industrial Client",
-      Callbackno: "+94760123458",
-      comment: "nothing to say",
-      projectregarding: "solar",
-      Description: "desc",
-    },
-    {
-      Taskid: 4,
-      Category: "Installation",
-      Requestedby: "SolarWave Solutions",
-      Addedby: "emilysolar",
-      Addeddate: "2025-02-09",
-      Status: "Pending",
-      Assignedto: "Corporate Client",
-      Callbackno: "+94760123459",
-      comment: "nothing to say",
-      projectregarding: "solar",
-      Description: "desc",
-    },
-    {
-      Taskid: 5,
-      Category: "Inspection",
-      Requestedby: "Sunshine Panels",
-      Addedby: "jamesking",
-      Addeddate: "2025-02-13",
-      Status: "In Progress",
-      Assignedto: "Residential Client",
-      Callbackno: "+94760123460",
-      comment: "nothing to say",
-      projectregarding: "solar",
-      Description: "desc",
-    },
-  ];
+  const handledelete = async () => {
+    if (selectedcustomer && selectedcustomer.task_ID) {
+      try {
+        const response = await axios.delete(
+          `${API_URL}/ProjectCIA/${selectedcustomer.task_ID}`
+        );
+        toast.success(response.data.message);
+        fetchcustomer(currentPage); // Refetch customers after deletion
+        setmodelconfirmopen(false); // Close the confirmation modal
+      } catch (error) {
+        console.error(error);
+        toast.error("Something went wrong during deletion.");
+      } finally {
+        setTimeout(() => {
+          setisloading(false);
+        }, 1000);
+      }
+    }
+  };
 
   const [ismodelopen, setmodelopen] = useState<boolean>(false);
   const [ismodelconfirmopen, setmodelconfirmopen] = useState<boolean>(false);
@@ -92,7 +44,7 @@ const CIAmain = () => {
   const [customere, setcustomere] = useState<any[]>([]);
   const [project, setproject] = useState<any[]>([]);
   const [isloading, setisloading] = useState(false);
-  const [selectedcustomer, setselectedcustomer] = useState({});
+  const [selectedcustomer, setselectedcustomer] = useState<any>(null);
   const [view, setview] = useState(false);
   const pageSize = 5;
   const handleOpenModal = (item: any) => {
@@ -106,6 +58,7 @@ const CIAmain = () => {
   };
   const fetchcustomer = async (page: number) => {
     setisloading(true);
+
     try {
       const response = await axios.get(
         `${API_URL}/ProjectCIA/?page=${page}&pageSize=${pageSize}`
@@ -141,10 +94,11 @@ const CIAmain = () => {
   const handleconfirmCloseModal = () => {
     setmodelconfirmopen(false);
   };
-  const handleconfirmOpenModal = () => {
+  const handleconfirmOpenModal = (item: any) => {
     console.log("clicked");
 
     setmodelconfirmopen(true);
+    setselectedcustomer(item);
   };
 
   const handleCloseModal = () => {
@@ -265,7 +219,7 @@ const CIAmain = () => {
                       <button
                         className=" text-[#183642] p-1 rounded-lg m-2 "
                         onClick={() => {
-                          handleconfirmOpenModal();
+                          handleconfirmOpenModal(item);
                         }}
                       >
                         <FaDeleteLeft className="pt-1" />
@@ -315,8 +269,10 @@ const CIAmain = () => {
         <DeleteConfirmationmodal
           isopen={ismodelconfirmopen}
           isclose={handleconfirmCloseModal}
+          handledelete={handledelete}
         />
       )}
+      {isloading && <CommonLoading />}
     </div>
   );
 };
