@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { useFormik } from "formik";
 
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
-
+import CommonLoading from "../../Utils/Commonloading";
 
 type props = {
   isopen: boolean;
@@ -27,6 +27,7 @@ const AddProject: React.FC<props> = ({
   project,
 }) => {
   if (!isopen) return null;
+  const [isloading, setisloading] = useState(false);
 
   const formik = useFormik({
     initialValues: {
@@ -44,6 +45,7 @@ const AddProject: React.FC<props> = ({
     },
     onSubmit: async (values) => {
       // alert(JSON.stringify(values, null, 2));
+      setisloading(true);
       try {
         const response = await axios.put(
           `${API_URL}/ProjectCIA/${selectedCustomer.task_ID}`,
@@ -51,18 +53,19 @@ const AddProject: React.FC<props> = ({
         );
 
         toast.success("CIA updated Successfully");
+        fetchproject();
+        resetPageToFirst();
+        isclose();
       } catch (error) {
         console.log(error);
-        toast.success("CIA Added Successfully");
+        toast.error("Error");
+      } finally {
+        setTimeout(() => setisloading(false), 1000);
       }
-      fetchproject();
-      resetPageToFirst();
-      isclose();
     },
   });
   return (
     <div>
-      <ToastContainer position="top-right" />
       <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50">
         <form onSubmit={formik.handleSubmit}>
           <div className="bg-slate-900 bg-opacity-95 p-5 rounded-lg shadow-lg w-auto h-5/6 m-1 flex flex-col text-white ">
@@ -293,6 +296,7 @@ const AddProject: React.FC<props> = ({
           </div>
         </form>
       </div>
+      {isloading && <CommonLoading />}
     </div>
   );
 };

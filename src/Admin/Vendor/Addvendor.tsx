@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { useFormik } from "formik";
 
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
-
+import CommonLoading from "../../Utils/Commonloading";
 
 type props = {
   isopen: boolean;
@@ -23,6 +23,7 @@ const Addvendor: React.FC<props> = ({
   resetPageToFirst,
 }) => {
   if (!isopen) return null;
+  const [isloading, setisloading] = useState(false);
 
   const formik = useFormik({
     initialValues: {
@@ -36,7 +37,7 @@ const Addvendor: React.FC<props> = ({
       officeno: selectedCustomer?.officeno || "",
     },
     onSubmit: async (values) => {
-      // alert(JSON.stringify(values, null, 2));
+      setisloading(true);
       try {
         if (selectedCustomer?.vendor_ID) {
           const resonponse = await axios.put(
@@ -57,6 +58,8 @@ const Addvendor: React.FC<props> = ({
       } catch (error) {
         console.log(error);
         toast.success("Customer Added Successfully");
+      } finally {
+        setTimeout(() => setisloading(false), 1000);
       }
     },
   });
@@ -216,6 +219,7 @@ const Addvendor: React.FC<props> = ({
           </div>
         </form>
       </div>
+      {isloading && <CommonLoading />}
     </div>
   );
 };

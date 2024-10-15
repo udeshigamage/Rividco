@@ -12,6 +12,7 @@ import {
 import { toast } from "react-toastify";
 import AddCIA from "./AddCIA";
 import CommonLoading from "../../Utils/Commonloading";
+import nodata from "../../assets/Nodata.svg";
 
 const API_URL = import.meta.env.VITE_API_URL;
 const CIAmain = () => {
@@ -80,7 +81,7 @@ const CIAmain = () => {
       console.log(error);
       toast.error("Something went wrong");
     } finally {
-      setisloading(false);
+      setTimeout(() => setisloading(false), 1000);
     }
   };
   const handlePageChange = (page: number) => {
@@ -161,7 +162,11 @@ const CIAmain = () => {
             <tr>
               <td colSpan={7} className="text-center">
                 <div className="flex  flex-row justify-center items-center">
-                  <span className="loading loading-dots size-16 loading-lg"></span>
+                  <img
+                    src={nodata}
+                    alt="No data"
+                    className="w-32 h-32 mx-auto"
+                  />
                 </div>
               </td>
             </tr>

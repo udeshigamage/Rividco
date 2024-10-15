@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { useFormik } from "formik";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
+import CommonLoading from "../../Utils/Commonloading";
 
 type Props = {
   isopen: boolean;
@@ -25,6 +26,7 @@ const Addvendoritem: React.FC<Props> = ({
   vendor,
 }) => {
   if (!isopen) return null;
+  const [isloading, setisloading] = useState(false);
 
   const formik = useFormik({
     initialValues: {
@@ -39,6 +41,7 @@ const Addvendoritem: React.FC<Props> = ({
     },
 
     onSubmit: async (values) => {
+      setisloading(true);
       try {
         if (selecteditem?.vendoritem_ID) {
           const response = await axios.put(
@@ -53,9 +56,12 @@ const Addvendoritem: React.FC<Props> = ({
         fetchitem();
         resetPageToFirst();
         isclose();
+        toast.success("Vendor item saved successfully!");
       } catch (error) {
         console.error(error);
         toast.error("Failed to save vendor item.");
+      } finally {
+        setTimeout(() => setisloading(false), 1000);
       }
     },
   });
@@ -253,6 +259,7 @@ const Addvendoritem: React.FC<Props> = ({
           </div>
         </form>
       </div>
+      {isloading && <CommonLoading />}
     </div>
   );
 };

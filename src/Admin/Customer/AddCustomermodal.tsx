@@ -5,6 +5,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 import Projectviewmodal from "./Projectviewmodal";
+import CommonLoading from "../../Utils/Commonloading";
 const API_URL = import.meta.env.VITE_API_URL;
 type props = {
   isopen: boolean;
@@ -25,6 +26,7 @@ const AddCustomermodal: React.FC<props> = ({
 }) => {
   if (!isopen) return null;
   const [modelopen, setmodelopen] = useState(false);
+  const [isloading, setisloading] = useState(false);
 
   const handleOpenModal = () => {
     setmodelopen(true);
@@ -57,6 +59,7 @@ const AddCustomermodal: React.FC<props> = ({
       lastName: Yup.string().required("Required"),
     }),
     onSubmit: async (values, { resetForm }) => {
+      setisloading(true);
       try {
         if (selectedCustomer?.customer_ID) {
           const resonponse = await axios.put(
@@ -77,6 +80,8 @@ const AddCustomermodal: React.FC<props> = ({
       } catch (error) {
         console.log(error);
         toast.error("Error");
+      } finally {
+        setTimeout(() => setisloading(false), 1000);
       }
     },
   });
@@ -300,6 +305,7 @@ const AddCustomermodal: React.FC<props> = ({
       {modelopen && (
         <Projectviewmodal isopen={modelopen} isclose={handleCLoseModal} />
       )}
+      {isloading && <CommonLoading />}
     </div>
   );
 };

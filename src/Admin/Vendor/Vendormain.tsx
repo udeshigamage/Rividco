@@ -5,6 +5,7 @@ import { IoIosAdd } from "react-icons/io";
 
 import DeleteConfirmationmodal from "../../Utils/DeleteConfirmationmodal";
 import axios from "axios";
+import nodata from "../../assets/Nodata.svg";
 
 import {
   TbPlayerTrackNextFilled,
@@ -13,6 +14,7 @@ import {
 import { toast } from "react-toastify";
 import Addvendor from "./Addvendor";
 import pico2 from "../../assets/pico5.jpg";
+import CommonLoading from "../../Utils/Commonloading";
 
 const Vendormain = () => {
   const [ismodelopen, setmodelopen] = useState<boolean>(false);
@@ -42,11 +44,12 @@ const Vendormain = () => {
       setcustomer(response.data.data);
       setTotalPages(response.data.totalPages);
       settotalitems(response.data.totalItems);
+      toast.success("Data Fetched Successfully");
     } catch (error) {
       console.log(error);
       toast.error("Something went wrong");
     } finally {
-      setisloading(false);
+      setTimeout(() => setisloading(false), 1000);
     }
   };
   const handlePageChange = (page: number) => {
@@ -140,7 +143,11 @@ const Vendormain = () => {
             <tr>
               <td colSpan={7} className="text-center">
                 <div className="flex  flex-row justify-center items-center">
-                  <span className="loading loading-dots size-16 loading-lg"></span>
+                  <img
+                    src={nodata}
+                    alt="No data"
+                    className="w-32 h-32 mx-auto"
+                  />
                 </div>
               </td>
             </tr>
@@ -237,6 +244,7 @@ const Vendormain = () => {
           handledelete={handledelete}
         />
       )}
+      {isloading && <CommonLoading />}
     </div>
   );
 };

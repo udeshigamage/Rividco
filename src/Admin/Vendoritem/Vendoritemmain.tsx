@@ -5,6 +5,7 @@ import { IoIosAdd } from "react-icons/io";
 
 import DeleteConfirmationmodal from "../../Utils/DeleteConfirmationmodal";
 import axios from "axios";
+import nodata from "../../assets/Nodata.svg";
 
 import {
   TbPlayerTrackNextFilled,
@@ -12,6 +13,7 @@ import {
 } from "react-icons/tb";
 import { toast } from "react-toastify";
 import Addvendor from "./Addvendoritem";
+import CommonLoading from "../../Utils/Commonloading";
 
 const Vendoritemmain = () => {
   const [ismodelopen, setmodelopen] = useState<boolean>(false);
@@ -45,11 +47,12 @@ const Vendoritemmain = () => {
       setitem(response.data.data);
       setTotalPages(response.data.totalPages);
       settotalitems(response.data.totalItems);
+      toast.success("Data Fetched Successfully");
     } catch (error) {
       console.log(error);
       toast.error("Something went wrong");
     } finally {
-      setisloading(false);
+      setTimeout(() => setisloading(false), 1000);
     }
   };
   const handlePageChange = (page: number) => {
@@ -139,9 +142,7 @@ const Vendoritemmain = () => {
           <tbody>
             <tr>
               <td colSpan={7} className="text-center">
-                <div className="flex  flex-row justify-center items-center">
-                  <span className="loading loading-dots size-16 loading-lg"></span>
-                </div>
+                <img src={nodata} alt="No data" className="w-32 h-32 mx-auto" />
               </td>
             </tr>
           </tbody>
@@ -244,6 +245,7 @@ const Vendoritemmain = () => {
           handledelete={handledelete}
         />
       )}
+      {isloading && <CommonLoading />}
     </div>
   );
 };

@@ -5,6 +5,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 import Projectviewmodal from "./Projectviewmodal";
+import CommonLoading from "../../Utils/Commonloading";
 const API_URL = import.meta.env.VITE_API_URL;
 type props = {
   isopen: boolean;
@@ -25,6 +26,7 @@ const AddEmployeemodal: React.FC<props> = ({
 }) => {
   if (!isopen) return null;
   const [modelopen, setmodelopen] = useState(false);
+  const [isloading, setisloading] = useState(false);
 
   const handleOpenModal = () => {
     setmodelopen(true);
@@ -65,6 +67,8 @@ const AddEmployeemodal: React.FC<props> = ({
       } catch (error) {
         console.log(error);
         toast.error("Error");
+      } finally {
+        setTimeout(() => setisloading(false), 1000);
       }
     },
   });
@@ -240,6 +244,7 @@ const AddEmployeemodal: React.FC<props> = ({
       {modelopen && (
         <Projectviewmodal isopen={modelopen} isclose={handleCLoseModal} />
       )}
+      {isloading && <CommonLoading />}
     </div>
   );
 };
