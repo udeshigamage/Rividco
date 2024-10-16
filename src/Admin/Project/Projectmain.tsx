@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { FaEdit, FaEye } from "react-icons/fa";
+import { FaEdit, FaEye, FaProcedures } from "react-icons/fa";
 import { FaDeleteLeft } from "react-icons/fa6";
 import { IoIosAdd } from "react-icons/io";
 
 import DeleteConfirmationmodal from "../../Utils/DeleteConfirmationmodal";
 import axios from "axios";
+import nodata from "../../assets/Nodata.svg";
 
 import {
   TbPlayerTrackNextFilled,
@@ -14,6 +15,7 @@ import { toast } from "react-toastify";
 import AddProject from "./Addproject";
 import { useNavigate } from "react-router-dom";
 import pico2 from "../../assets/pico5.jpg";
+import CommonLoading from "../../Utils/Commonloading";
 const API_URL = import.meta.env.VITE_API_URL;
 const Projectmain = () => {
   const [ismodelopen, setmodelopen] = useState<boolean>(false);
@@ -56,7 +58,7 @@ const Projectmain = () => {
       console.log(error);
       toast.error("Something went wrong");
     } finally {
-      setisloading(false);
+      setTimeout(() => setisloading(false), 1000);
     }
   };
   const resetPageToFirst = () => {
@@ -149,15 +151,16 @@ const Projectmain = () => {
             <th className="border-collapse border border-[#183642] border-x-2 border-y-2 w-52 ">
               Actions
             </th>
+            <th className="border-collapse border border-[#183642] border-x-2 border-y-2 w-52 ">
+              View project item/test/cia
+            </th>
           </tr>
         </thead>
         {isloading ? (
           <tbody>
             <tr>
               <td colSpan={7} className="text-center">
-                <div className="flex  flex-row justify-center items-center">
-                  <span className="loading loading-dots size-16 loading-lg"></span>
-                </div>
+                <img src={nodata} alt="No data" className="w-32 h-32 mx-auto" />
               </td>
             </tr>
           </tbody>
@@ -168,13 +171,8 @@ const Projectmain = () => {
                 key={index}
                 className="border-collapse border font-semibold font-mono border-[#183642] border-x-1 border-y-1 text-center align-middle "
               >
-                <tr className="border-collapse border border-[#183642] border-x-1 border-y-1 hover:bg-[#183642] hover:text-white ">
-                  <td
-                    className="border-collapse border border-[#183642] border-x-1 border-y-1 "
-                    onClick={() => {
-                      handleclick(item);
-                    }}
-                  >
+                <tr className="border-collapse border border-[#183642] border-x-1 border-y-1   ">
+                  <td className="border-collapse border border-[#183642] border-x-1 border-y-1 ">
                     {item.project_ID}
                   </td>
                   <td className="border-collapse border border-[#183642] border-x-1 border-y-1">
@@ -226,6 +224,16 @@ const Projectmain = () => {
                       </button>
                     </div>
                   </td>
+                  <td className="">
+                    <button
+                      className=" text-white bg-[#183642] p-1 rounded-lg m-2 "
+                      onClick={() => {
+                        handleclick(item);
+                      }}
+                    >
+                      View{" ->"}
+                    </button>
+                  </td>
                 </tr>
               </tbody>
             ))}
@@ -274,6 +282,7 @@ const Projectmain = () => {
           handledelete={handledelete}
         />
       )}
+      {isloading && <CommonLoading />}
     </div>
   );
 };

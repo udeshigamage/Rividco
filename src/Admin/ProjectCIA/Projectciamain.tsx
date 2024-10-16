@@ -6,6 +6,7 @@ import { IoIosAdd } from "react-icons/io";
 import DeleteConfirmationmodal from "../../Utils/DeleteConfirmationmodal";
 import axios from "axios";
 import pico2 from "../../assets/pico5.jpg";
+import nodata from "../../assets/Nodata.svg";
 
 import {
   TbPlayerTrackNextFilled,
@@ -14,6 +15,7 @@ import {
 import { toast } from "react-toastify";
 
 import AddProjectcia from "./Addprojectcia";
+import CommonLoading from "../../Utils/Commonloading";
 const API_URL = import.meta.env.VITE_API_URL;
 type Props = {
   project: any;
@@ -59,7 +61,7 @@ const Projectciamain: React.FC<Props> = ({ project }) => {
       console.log(error);
       toast.error("Something went wrong");
     } finally {
-      setisloading(false);
+      setTimeout(() => setisloading(false), 1000);
     }
   };
   const handlePageChange = (page: number) => {
@@ -68,6 +70,7 @@ const Projectciamain: React.FC<Props> = ({ project }) => {
     }
   };
   const handledelete = async () => {
+    setisloading(true);
     if (selectedproject && selectedproject.task_ID) {
       try {
         const response = await axios.delete(
@@ -79,6 +82,8 @@ const Projectciamain: React.FC<Props> = ({ project }) => {
       } catch (error) {
         console.error(error);
         toast.error("Something went wrong during deletion.");
+      } finally {
+        setTimeout(() => setisloading(false), 1000);
       }
     }
   };
@@ -156,7 +161,11 @@ const Projectciamain: React.FC<Props> = ({ project }) => {
             <tr>
               <td colSpan={7} className="text-center">
                 <div className="flex  flex-row justify-center items-center">
-                  <span className="loading loading-dots size-16 loading-lg"></span>
+                  <img
+                    src={nodata}
+                    alt="No data"
+                    className="w-32 h-32 mx-auto"
+                  />
                 </div>
               </td>
             </tr>
@@ -259,6 +268,7 @@ const Projectciamain: React.FC<Props> = ({ project }) => {
           handledelete={handledelete}
         />
       )}
+      {isloading && <CommonLoading />}
     </div>
   );
 };

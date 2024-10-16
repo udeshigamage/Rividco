@@ -1,17 +1,17 @@
 import { useEffect, useState } from "react";
 import { FaEdit, FaEye } from "react-icons/fa";
-import { FaDeleteLeft } from "react-icons/fa6";
+
 import { IoIosAdd } from "react-icons/io";
 
-import DeleteConfirmationmodal from "../../Utils/DeleteConfirmationmodal";
 import axios from "axios";
-
+import nodata from "../../assets/Nodata.svg";
 import {
   TbPlayerTrackNextFilled,
   TbPlayerTrackPrevFilled,
 } from "react-icons/tb";
 import { toast } from "react-toastify";
 import AddSystem from "./AddSystem";
+import CommonLoading from "../../Utils/Commonloading";
 const API_URL = import.meta.env.VITE_API_URL;
 const Systemusermain = () => {
   const [ismodelopen, setmodelopen] = useState<boolean>(false);
@@ -44,7 +44,7 @@ const Systemusermain = () => {
       console.log(error);
       toast.error("Something went wrong");
     } finally {
-      setisloading(false);
+      setTimeout(() => setisloading(false), 1000);
     }
   };
   const handlePageChange = (page: number) => {
@@ -112,7 +112,11 @@ const Systemusermain = () => {
             <tr>
               <td colSpan={7} className="text-center">
                 <div className="flex  flex-row justify-center items-center">
-                  <span className="loading loading-dots size-16 loading-lg"></span>
+                  <img
+                    src={nodata}
+                    alt="No data"
+                    className="w-32 h-32 mx-auto"
+                  />
                 </div>
               </td>
             </tr>
@@ -158,14 +162,14 @@ const Systemusermain = () => {
                       >
                         <FaEdit className="pt-1" />
                       </button>
-                      <button
+                      {/* <button
                         className=" text-[#183642] p-1 rounded-lg m-2 "
                         onClick={() => {
                           handleconfirmOpenModal();
                         }}
                       >
                         <FaDeleteLeft className="pt-1" />
-                      </button>
+                      </button> */}
                     </div>
                   </td>
                 </tr>
@@ -203,12 +207,7 @@ const Systemusermain = () => {
           view={view}
         />
       )}
-      {ismodelconfirmopen && (
-        <DeleteConfirmationmodal
-          isopen={ismodelconfirmopen}
-          isclose={handleconfirmCloseModal}
-        />
-      )}
+      {isloading && <CommonLoading />}
     </div>
   );
 };

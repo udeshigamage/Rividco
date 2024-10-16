@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { useFormik } from "formik";
 
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
+import CommonLoading from "../../Utils/Commonloading";
 
 type props = {
   isopen: boolean;
@@ -27,6 +28,7 @@ const AddProject: React.FC<props> = ({
   employee,
 }) => {
   if (!isopen) return null;
+  const [isloading, setisloading] = useState(false);
 
   const formik = useFormik({
     initialValues: {
@@ -44,6 +46,7 @@ const AddProject: React.FC<props> = ({
     },
     onSubmit: async (values) => {
       // alert(JSON.stringify(values, null, 2));
+      setisloading(true);
       try {
         if (selectedproject?.id) {
           const resonponse = await axios.put(
@@ -63,6 +66,8 @@ const AddProject: React.FC<props> = ({
       } catch (error) {
         console.log(error);
         toast.error("Failes to save project");
+      } finally {
+        setTimeout(() => setisloading(false), 1000);
       }
     },
   });
@@ -295,6 +300,7 @@ const AddProject: React.FC<props> = ({
           </div>
         </form>
       </div>
+      {isloading && <CommonLoading />}
     </div>
   );
 };

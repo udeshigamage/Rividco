@@ -12,6 +12,8 @@ import {
 } from "react-icons/tb";
 import { toast } from "react-toastify";
 import AddProject from "./Addprojectitem";
+import CommonLoading from "../../Utils/Commonloading";
+import nodata from "../../assets/Nodata.svg";
 
 type Props = {
   project: any;
@@ -52,7 +54,7 @@ const Projectitemmain: React.FC<Props> = ({ project }) => {
       console.log(error);
       toast.error("Something went wrong");
     } finally {
-      setisloading(false);
+      setTimeout(() => setisloading(false), 1000);
     }
   };
   const handlePageChange = (page: number) => {
@@ -140,7 +142,11 @@ const Projectitemmain: React.FC<Props> = ({ project }) => {
             <tr>
               <td colSpan={7} className="text-center">
                 <div className="flex  flex-row justify-center items-center">
-                  <span className="loading loading-dots size-16 loading-lg"></span>
+                  <img
+                    src={nodata}
+                    alt="No data"
+                    className="w-32 h-32 mx-auto"
+                  />
                 </div>
               </td>
             </tr>
@@ -242,6 +248,7 @@ const Projectitemmain: React.FC<Props> = ({ project }) => {
           handledelete={handledelete}
         />
       )}
+      {isloading && <CommonLoading />}
     </div>
   );
 };

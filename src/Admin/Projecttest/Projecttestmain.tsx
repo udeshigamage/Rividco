@@ -5,6 +5,7 @@ import { IoIosAdd } from "react-icons/io";
 
 import DeleteConfirmationmodal from "../../Utils/DeleteConfirmationmodal";
 import axios from "axios";
+import nodata from "../../assets/Nodata.svg";
 
 import {
   TbPlayerTrackNextFilled,
@@ -13,6 +14,7 @@ import {
 import { toast } from "react-toastify";
 
 import AddProjecttest from "./Addprojecttest";
+import CommonLoading from "../../Utils/Commonloading";
 const API_URL = import.meta.env.VITE_API_URL;
 type Props = {
   project: any;
@@ -48,11 +50,12 @@ const Projecttestmain: React.FC<Props> = ({ project }) => {
       setprojecte(response.data.data);
       setTotalPages(response.data.totalPages);
       settotalitems(response.data.totalItems);
+      toast.success("project items fetched successfully");
     } catch (error) {
       console.log(error);
       toast.error("Something went wrong");
     } finally {
-      setisloading(false);
+      setTimeout(() => setisloading(false), 1000);
     }
   };
   const handlePageChange = (page: number) => {
@@ -139,7 +142,11 @@ const Projecttestmain: React.FC<Props> = ({ project }) => {
             <tr>
               <td colSpan={7} className="text-center">
                 <div className="flex  flex-row justify-center items-center">
-                  <span className="loading loading-dots size-16 loading-lg"></span>
+                  <img
+                    src={nodata}
+                    alt="No data"
+                    className="w-32 h-32 mx-auto"
+                  />
                 </div>
               </td>
             </tr>
@@ -241,6 +248,7 @@ const Projecttestmain: React.FC<Props> = ({ project }) => {
           handledelete={handledelete}
         />
       )}
+      {isloading && <CommonLoading />}
     </div>
   );
 };
